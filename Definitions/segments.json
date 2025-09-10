@@ -1,0 +1,129 @@
+{
+	"SEGMENT MSH": {
+		"description": "Message Header",
+		"long-description": "The MSH segment defines the intent, source, destination, and some specifics of the syntax of a message.",
+		"constituents": [{
+			"description": "Field Separator",
+			"type": "ST",
+			"length": 1,
+			"optionality": "R"
+		},
+		{
+			"description": "Encoding Characters",
+			"type": "ST",
+			"length": 4,
+			"optionality": "R"
+		},
+		{
+			"type": "HD",
+			"description": "Sending Application",
+			"optionality": "O"
+		},
+		{
+			"type": "HD",
+			"description": "Sending Facility",
+			"optionality": "O"
+		},
+		{
+			"type": "HD",
+			"description": "Receiving Application",
+			"optionality": "O"
+		},
+		{
+			"type": "HD",
+			"description": "Receiving Facility",
+			"optionality": "O"
+		},
+		{
+			"type": "TS",
+			"description": "Date/Time Of Message",
+			"optionality": "R"
+		},
+		{
+			"type": "ST",
+			"description": "Security",
+			"length": 40,
+			"optionality": "O"
+		},
+		{
+			"type": "MSG",
+			"description": "Message Type",
+			"optionality": "R"
+		},
+		{
+			"type": "ST",
+			"description": "Message Control ID",
+			"length": 20,
+			"optionality": "R"
+		},
+		{
+			"type": "PT",
+			"description": "Processing ID",
+			"optionality": "R"
+		},
+		{
+			"type": "VID",
+			"description": "Version ID",
+			"length": 60,
+			"optionality": "R"
+		},
+		{
+			"type": "NM",
+			"description": "Sequence Number",
+			"length": 15,
+			"optionality": "O"
+		},
+		{
+			"type": "ST",
+			"description": "Continuation Provider",
+			"length": 180,
+			"optionality": "O"
+		},
+		{
+			"type": "ID",
+			"description": "Accept Acknowledgement Type",
+			"length": 2,
+			"optionality": "O",
+			"table": "0155"
+		},
+		{
+			"type": "ID",
+			"description": "Application Acknowledgement Type",
+			"length": 2,
+			"optionality": "O",
+			"table": "0155"
+		},
+		{
+			"type": "ID",
+			"description": "Country Code",
+			"length": 3,
+			"optionality": "O",
+			"table": "0399"
+		},
+		{
+			"type": "ID",
+			"description": "Character Set",
+			"length": 4,
+			"optionality": "O",
+			"repeatability": -1
+		},
+		{
+			"type": "CE",
+			"description": "Principle Language of Message",
+			"length": 4,
+			"optionality": "O"
+		},
+		{
+			"type": "ID",
+			"description": "Alternate Character Set Handling Scheme",
+			"length": 20,
+			"optionality": "O"
+		},
+		{
+			"type": "EI",
+			"description": "Message Profile Identifier",
+			"optionality": "O",
+			"repeatability": -1
+		}]
+	}
+}

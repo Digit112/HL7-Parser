@@ -1,0 +1,11 @@
+{
+	"PRIMITIVE ST": {
+		"length": "199",
+		"description": "Textual information",
+		"long-description": "Up to 199 printable ASCII characters."
+	},
+	"PRIMITIVE ID": {
+		"description": "Coded values for HL7 tables",
+		"long-description": "Must consist of printable ASCII characters (like ST) and contain a value present in the associated table, which must not be user-defined."
+	}
+}
