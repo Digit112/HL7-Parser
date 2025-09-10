@@ -1,24 +1,28 @@
-"COMPOSITE HD": {
-	"description": "Hierarchic Designator",
-	"from": "2.A.33",
-	"constituents": [{
-		"description": "Namespace ID",
-		"type": "IS",
-		"length": 20,
-		"optionality": "O",
-		"table": "0300"
+{
+	"COMPOSITE HD": {
+		"description": "Hierarchic Designator",
+		"from": "2.A.33",
+		"constituents": [{
+			"description": "Namespace ID",
+			"type": "IS",
+			"length": 20,
+			"optionality": "O",
+			"table": "0300"
+		},
+		{
+			"description": "Universal ID",
+			"type": "ST",
+			"length": 199,
+			"optionality": "C"
+		},
+		{
+			"description": "Universal ID Type",
+			"type": "ID",
+			"length": 6,
+			"optionality": "C",
+			"table": "0301"
+		}]
 	},
-	{
-		"description": "Universal ID",
-		"type": "ST",
-		"length": 199,
-		"optionality": "C"
-	},
-	{
-		"description": "Universal ID Type",
-		"type": "ID",
-		"length": 6,
-		"optionality": "C",
-		"table": "0301"
-	}]
+	"COMPOSITE TS": {
+	}
 }

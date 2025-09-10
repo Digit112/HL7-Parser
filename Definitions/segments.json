@@ -2,6 +2,7 @@
 	"SEGMENT MSH": {
 		"description": "Message Header",
 		"long-description": "The MSH segment defines the intent, source, destination, and some specifics of the syntax of a message.",
+		"from": "2.24.1",
 		"constituents": [{
 			"description": "Field Separator",
 			"type": "ST",
@@ -15,115 +16,110 @@
 			"optionality": "R"
 		},
 		{
-			"type": "HD",
 			"description": "Sending Application",
-			"optionality": "O"
-		},
-		{
 			"type": "HD",
-			"description": "Sending Facility",
-			"optionality": "O"
-		},
-		{
-			"type": "HD",
-			"description": "Receiving Application",
-			"optionality": "O"
-		},
-		{
-			"type": "HD",
-			"description": "Receiving Facility",
-			"optionality": "O"
-		},
-		{
-			"type": "TS",
-			"description": "Date/Time Of Message",
-			"optionality": "R"
-		},
-		{
-			"type": "ST",
-			"description": "Security",
-			"length": 40,
-			"optionality": "O"
-		},
-		{
-			"type": "MSG",
-			"description": "Message Type",
-			"optionality": "R"
-		},
-		{
-			"type": "ST",
-			"description": "Message Control ID",
-			"length": 20,
-			"optionality": "R"
-		},
-		{
-			"type": "PT",
-			"description": "Processing ID",
-			"optionality": "R"
-		},
-		{
-			"type": "VID",
-			"description": "Version ID",
-			"length": 60,
-			"optionality": "R"
-		},
-		{
-			"type": "NM",
-			"description": "Sequence Number",
-			"length": 15,
-			"optionality": "O"
-		},
-		{
-			"type": "ST",
-			"description": "Continuation Provider",
 			"length": 180,
 			"optionality": "O"
 		},
 		{
-			"type": "ID",
-			"description": "Accept Acknowledgement Type",
-			"length": 2,
-			"optionality": "O",
-			"table": "0155"
+			"description": "Sending Facility",
+			"type": "HD",
+			"length": 180,
+			"optionality": "O"
 		},
 		{
-			"type": "ID",
-			"description": "Application Acknowledgement Type",
-			"length": 2,
-			"optionality": "O",
-			"table": "0155"
+			"description": "Receiving Application",
+			"type": "HD",
+			"length": 180,
+			"optionality": "O"
 		},
 		{
-			"type": "ID",
-			"description": "Country Code",
+			"description": "Receiving Facility",
+			"type": "HD",
+			"length": 180,
+			"optionality": "O"
+		},
+		{
+			"description": "Date/Time Of Message",
+			"type": "TS",
+			"length": 26,
+			"optionality": "O"
+		},
+		{
+			"description": "Security",
+			"type": "ST",
+			"length": 40,
+			"optionality": "O"
+		},
+		{
+			"description": "Message Type",
+			"type": "CM",
+			"length": 7,
+			"optionality": "R"
+		},
+		{
+			"description": "Message Control ID",
+			"type": "ST",
+			"length": 20,
+			"optionality": "R"
+		},
+		{
+			"description": "Processing ID",
+			"type": "PT",
 			"length": 3,
-			"optionality": "O",
-			"table": "0399"
+			"optionality": "R"
 		},
 		{
+			"description": "Version ID",
 			"type": "ID",
+			"length": 8,
+			"optionality": "R",
+			"table": "0104"
+		},
+		{
+			"description": "Sequence Number",
+			"type": "NM",
+			"length": 15,
+			"optionality": "O"
+		},
+		{
+			"description": "Continuation Pointer",
+			"type": "ST",
+			"length": 180,
+			"optionality": "O"
+		},
+		{
+			"description": "Accept Acknowledgement Type",
+			"type": "ID",
+			"length": 2,
+			"optionality": "O",
+			"table": "0155"
+		},
+		{
+			"description": "Application Acknowledgement Type",
+			"type": "ID",
+			"length": 2,
+			"optionality": "O",
+			"table": "0155"
+		},
+		{
+			"description": "Country Code",
+			"type": "ID",
+			"length": 2,
+			"optionality": "O"
+		},
+		{
 			"description": "Character Set",
-			"length": 4,
+			"type": "ID",
+			"length": 6,
 			"optionality": "O",
 			"repeatability": -1
 		},
 		{
 			"type": "CE",
-			"description": "Principle Language of Message",
-			"length": 4,
+			"description": "Principle Language Of Message",
+			"length": 60,
 			"optionality": "O"
-		},
-		{
-			"type": "ID",
-			"description": "Alternate Character Set Handling Scheme",
-			"length": 20,
-			"optionality": "O"
-		},
-		{
-			"type": "EI",
-			"description": "Message Profile Identifier",
-			"optionality": "O",
-			"repeatability": -1
 		}]
 	}
 }
