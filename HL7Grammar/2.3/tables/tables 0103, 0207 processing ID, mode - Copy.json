@@ -1,0 +1,22 @@
+{
+	"TABLE 0103": {
+		"description": "Processing ID",
+		"long-description": "Found in MSH.11 Processing ID (PT). This defines whether the message is part of a production, training, or debugging system",
+		"from": "2.24.1.11",
+		"values": {
+			"D": "Debugging",
+			"P": "Production",
+			"T": "Training"
+		}
+	},
+	"TABLE 0207": {
+		"description": "Processing mode",
+		"long-description": "Found in MSH.11 Processing ID (PT). This defines whether the message is part of an archival process or an initial load. This allows different priorities to be given to different processing modes.",
+		"from": "2.24.1.11",
+		"values": {
+			"A": "Archive",
+			"R": "Restore from archive",
+			"I": "Initial load"
+		}
+	}
+}

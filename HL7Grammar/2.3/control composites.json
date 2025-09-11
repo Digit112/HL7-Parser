@@ -1,0 +1,102 @@
+{
+	"COMPOSITE CE": {
+		"description": "Coded element",
+		"long-description": "This data type transmits codes and the text associated with the code. Coding schemse include lists of allergens, medicaitons, vaccines, illnesses, and much much more. This data type accomodates the parallel transmission of an equivalent code in an alternate or local coding scheme.",
+		"from": "2.8.3",
+		"constituents": [{
+			"description": "Identifier",
+			"long-description": "Sequence of characters (the code) that uniquely identifies the item being referenced by the <text>. Different coding schemes will have different elements here.",
+			"from": "2.8.3.1",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Text",
+			"long-description": "Name or description of the item in question. E.g., myocardial infarction or X-ray impression.",
+			"from": "2.8.3.2",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Name of coding system",
+			"long-description": "Each coding system is assigned a unique identifier. This component will serve to identify the coding scheme being used in the identifier component. The combination of the identifier and name of coding system components will be a unique code for a data item. See also § 7.1.4, \"Coding schemes.\" Other schemes may be added as needed.",
+			"from": "2.8.3.3",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Alternate identifier",
+			"long-description": "Identifier with the same meaning as the proper identifier but in an alternate or local coding system.",
+			"from": "2.8.3.4",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Alternate text",
+			"long-description": "Text with the same meaning as the proper text but in an alternate or local coding system.",
+			"from": "2.8.3.4",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Name of alternate coding system",
+			"long-description": "Name of the alternate or local coding scheme in use for the alternate fields.",
+			"from": "2.8.3.4",
+			"type": "ST",
+			"optionality": "O"
+		}]
+	},
+	"COMPOSITE HD": {
+		"description": "Hierarchic Designator",
+		"long-description": "The HD is designed to be a more powerful application identifier. It is also designed to be used either as a local version of a site-defined application identifier or a publicly-assigned UID",
+		"from": "2.8.18",
+		"constituents": [{
+			"description": "Namespace ID",
+			"long-description": "A locally unique identifier.",
+			"type": "IS",
+			"length": 20,
+			"optionality": "O",
+			"table": "0300"
+		}, {
+			"description": "Universal ID",
+			"long-description": "A universally unique ID such as a registered domain or UUID.",
+			"type": "ST",
+			"optionality": "C"
+		}, {
+			"description": "Universal ID Type",
+			"long-description": "Clarifies the format of HD.2.",
+			"type": "ID",
+			"optionality": "C",
+			"table": "0103"
+		}]
+	},
+	"COMPOSITE PT": {
+		"description": "Processing type",
+		"long-description": "This data type indicates whether to process a message as defined in HL7 Application (level 7) Processing rules.",
+		"from": "2.8.29",
+		"constituents": [{
+			"description": "Processing ID",
+			"long description": "A value that defines whether the message is part of a production, training, or debugging system.",
+			"type": "ID",
+			"optionality": "O",
+			"table": "0103"
+		}, {
+			"description": "Processing mode",
+			"long-description": "A value that defines whether the message is part of an archival process or an initial load.",
+			"type": "ID",
+			"optionality": "O",
+			"table": "0207"
+		}]
+	},
+	"COMPOSITE TS": {
+		"description": "Time stamp",
+		"long-description": "Contains the exact date and time of an event. The specification allows for up to 100-nanosecond precision, but unrounded numbers or numbers of greater precision will be accepted by my application, in fact the size of these fields are not restricted by the specification.",
+		"from": "2.8.42",
+		"constituents": [{
+			"description": "The date and time of the event.",
+			"long-description": "Takes the form `YYYY[MM[DD[HHMM[SS[.S[S[S[S]]]]]]]][+/-ZZZZ]`.",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Degree of precision. This component is retained only for backward compatibility.",
+			"long-description": "This component is a single letter, one of 'Y', 'L', 'D', 'H', 'M', or 'S' for year, month, day, hour, minute, and second respectively.",
+			"type": "ST",
+			"optionality": "O"
+		}]
+	}
+}

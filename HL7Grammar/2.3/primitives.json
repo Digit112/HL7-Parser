@@ -1,0 +1,23 @@
+{
+	"PRIMITIVE ID": {
+		"description": "Coded values for HL7 tables",
+		"long-description": "Must consist of printable ASCII characters (like ST) and contain a value present in the associated table, which must not be user-defined.",
+		"from": "2.8.19"
+	},
+	"PRIMITIVE IS": {
+		"description": "Coded values for user-defined tables",
+		"long-description": "Must consist of printale ASCII characters (like ST) and contain a value present in the associated table, which must be user-defined.",
+		"from": "2.8.20"
+	},
+	"PRIMITIVE NM": {
+		"description": "Numeric",
+		"long-description": "Numeric data written in decimal, the allowable charcters are the ASCII digits, the leading plus and minus sign, and a single decimal point.",
+		"from": "2.8.25"
+	},
+	"PRIMITIVE ST": {
+		"description": "Textual information",
+		"long-description": "Up to 199 printable ASCII characters in the ASCII range 0x20 (32) to 0x7E (126) except the defined delimiter characters.",
+		"from": "2.8.38",
+		"length": 199
+	}
+}

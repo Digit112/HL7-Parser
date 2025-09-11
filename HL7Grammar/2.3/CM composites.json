@@ -1,0 +1,20 @@
+{
+	"COMPOSITE CM_MSG": {
+		"description": "Message type",
+		"long-description": "Contains the message type and trigger event for the message.",
+		"from": "2.24.1.9",
+		"constituents": [{
+			"description": "Message type",
+			"from": "2.24.1.9",
+			"type": "ID",
+			"optionality": "R",
+			"table": "0076"
+		}, {
+			"description": "Trigger Event",
+			"from": "2.24.1.9",
+			"type": "ID",
+			"optionality": "R",
+			"table": "0003"
+		}]
+	}
+}

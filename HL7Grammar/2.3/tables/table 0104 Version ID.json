@@ -1,0 +1,13 @@
+{
+	"TABLE 0104": {
+		"description": "Version ID",
+		"from": "2.24.1.12",
+		"values": {
+			"2.0": "Release 2.0",
+			"2.0D": "Demo 2.0",
+			"2.1": "Release 2.1",
+			"2.2": "Release 2.2",
+			"2.3": "Release 2.3"
+		}
+	}
+}
