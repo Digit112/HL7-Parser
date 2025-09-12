@@ -44,7 +44,8 @@ The definitions for Messages, Segments, Composites, and Primitives are shown bel
 			"length": <integer>,
 			"optionality": "<O | C | R | B | W>",
 			"repeatability": <integer>,
-			"table": "<table-id>"
+			"table": "<table-id>",
+			"constituents": [ ... ]
 		},
 		...
 	}]
@@ -67,6 +68,12 @@ The options "C", "B", and "W" are internally treated identically to optional ("O
 `repeatability` is the maximum number of times this constituent can appear, with -1 meaning it can appear an unlimited number of times. Default is 1.
 
 `table` is specified on fields like ID or HD which are really just enums.
+
+### Nested constituents
+
+The `constituents` field is recursive, it can have constituents of its own. This models the HL7 concept of "segment groups" quite well. Many restrictions apply to this field, however. Firstly, that this feature is only valid on MESSAGE entities, since they are the only entities whose constituents are segments or segment groups (which are what we are grouping). Secondly, a constituent with a `constituents` field of its own must never have the `type`, `length`, or `table` attributes. Thirdly, the constituents of a constituent are always segments.
+
+The `optionality` and `repeatability` fields are really the things that make this feature so valuable. A constituent segment group with two segments inside can be made optional while those two segments are each required within the group. Thus, the two segments must appear as a pair or not at all. Or the group can be made repeatable, such that the segments must always repeat together as a pair. 
 
 ## Tables
 

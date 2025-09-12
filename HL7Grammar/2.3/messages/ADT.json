@@ -1,0 +1,108 @@
+{
+	"MESSAGE ADT A01": {
+		"description": "ADT/ACK admit/visit notification",
+		"long-description": "An A01 event is intended to be used for \"Admitted\" patients only. An A01 event is sent as a result of a patient undergoing the admission process which assigns the patient to a bed. It signals the beginning of a patient's stay in a healthcare facility. Normally, this information is entered in the primary Patient Administration system and broadcast to the nursing units and ancillary systems. It includes short stay and John Doe admissions. For example, an A01 event can be used to notify: the pharmacy system that a patient has been admitted and may be legitimately prescribed drugs; the nursing system that the patient has been admitted and needs a care plan prepared; the finance system of the start of the billing period; the dietary system that a new patient has been installed and requires dietary services; the laboratory, pathology, and radiology systems that a patient has been admitted and is entitled to receive services; the clinical repository that an admission has taken place for the EMR (electronic medical record). When an account's start and end dates span a period greater than any particular visit, the P01 (add account) event should be used to transmit the opening of an account. The A01 event can notify systems of the creation of an account as well as notify them of a patient's arrival in the healthcare facility. In order to create a new account without notifying of patient's arrival, use the P01 event.",
+		"from": "3.2.1",
+		"constituents": [{
+			"description": "Message header",
+			"type": "MSH",
+			"optionality": "R"
+		}, {
+			"description": "Event Type",
+			"type": "EVN",
+			"optionality": "R"
+		}, {
+			"description": "Patient Identification",
+			"type": "PID",
+			"optionality": "R"
+		}, {
+			"description": "Additional Demographics",
+			"type": "PD1",
+			"optionality": "O"
+		}, {
+			"description": "Next of Kin / Associated Parties",
+			"type": "NK1",
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Patient Visit",
+			"type": "PV1",
+			"optionality": "R"
+		}, {
+			"description": "Patient Visit - Additional Info",
+			"type": "PV2",
+			"optionality": "O"
+		}, {
+			"description": "Disability Information",
+			"type": "DB1",
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Observation / Result",
+			"type": "OBX",
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Allergy Information",
+			"type": "AL1",
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Diagnosis Information",
+			"type": "DG1",
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Diagnosis Related Group",
+			"type": "DRG",
+			"optionality": "O"
+		}, {
+			"optionality": "O",
+			"repeatability": -1,
+			"constituents": [{
+				"description": "Procedure",
+				"type": "PR1",
+				"optionality": "R"
+			}, {
+				"description": "Role",
+				"type": "ROL",
+				"optionality": "O",
+				"repeatability": -1
+			}]
+		}, {
+			"description": "Guarantor",
+			"type": "GT1",
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Insurance Information",
+			"optionality": "O",
+			"repeatability": -1,
+			"constituents": [{
+				"description": "Insurance",
+				"type": "IN1",
+				"optionality": "R"
+			}, {
+				"description": "Insurance Additional Info",
+				"type": "IN2",
+				"optionality": "O"
+			}, {
+				"description": "Insurance Additional Info - Cert.",
+				"type": "IN3",
+				"optionality": "O"
+			}]
+		}, {
+			"description": "Accident Information",
+			"type": "ACC",
+			"optionality": "O"
+		}, {
+			"description": "Universal Bill Information",
+			"type": "UB1",
+			"optionality": "O"
+		}, {
+			"description": "Universal Bill 92 Information",
+			"type": "UB2",
+			"optionality": "O"
+		}]
+	}
+}

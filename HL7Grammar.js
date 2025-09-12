@@ -40,7 +40,16 @@ class HL7Grammar {
 				
 				// Attempt construction of appropriate entity
 				if (metatype == "PRIMITIVE") {
-					this.primitives[type_id] = new HL7Primitive(type_id, body, file_of_origin)
+					this.primitives[type_id] = new HL7Primitive(type_id, body, file_of_origin, this)
+				}
+				else if (metatype == "COMPOSITE") {
+					this.composites[type_id] = new HL7Composite(type_id, body, file_of_origin, this)
+				}
+				else if (metatype == "SEGMENT") {
+					this.segments[type_id] = new HL7Segment(type_id, body, file_of_origin, this)
+				}
+				else if (metatype == "MESSAGE") {
+					this.messages[type_id] = new HL7Message(type_id, body, file_of_origin, this)
 				}
 			}
 			catch (err) {
@@ -55,6 +64,22 @@ class HL7Grammar {
 		if (this.finalized) throw new Error("Cannot finalize an HL7Grammar twice.")
 			
 		// Check that all constituents are types that exist and that their metatypes are valid.
+		for (let composite of Object.values(this.composites)) {
+			composite.validate_constituents(["PRIMITIVE"])
+		}
+		for (let segment of Object.values(this.segments)) {
+			segment.validate_constituents(["COMPOSITE", "PRIMITIVE"])
+		}
+		for (let message of Object.values(this.messages)) {
+			message.validate_constituents(["SEGMENT"])
+		}
+		
+		// Set lengths on all constituents.
+		// Ensure no constituent has a length greater than its base type
+		
+		// Set the length on all tables
+		// Set the length on all table-referencing fields based on the tables.
+		// Set the length of all non-primitives based on their constituents.
 		
 		this.finalize = true
 	}
@@ -108,9 +133,61 @@ class HL7Grammar {
 		let debug_str = ""
 		debug_str += "PRIMITIVES:\n"
 		for (let entity of Object.values(this.primitives)) {
-			debug_str += `${entity.type_id} - ${entity.description}${isFinite(entity.length) ? ` (<=${entity.length})` : ""}\n`
+			debug_str += entity.toString() + "\n"
 		}
 		
 		console.log(debug_str)
+	}
+	
+	// Logs a list of all composites and their constituents
+	debug_review_all_composites() {
+		let debug_str = ""
+		debug_str += "COMPOSITES:\n"
+		for (let entity of Object.values(this.composites)) {
+			debug_str += entity + "\n"
+			for (let constituent of entity.constituents) {
+				debug_str += "  " + constituent + "\n"
+			}
+			
+		}
+		
+		console.log(debug_str)
+	}
+	
+	// Logs a list of all segments and their constituents
+	debug_review_all_segments() {
+		let debug_str = ""
+		debug_str += "SEGMENTS:\n"
+		for (let entity of Object.values(this.segments)) {
+			debug_str += entity + "\n"
+			for (let constituent of entity.constituents) {
+				debug_str += "  " + constituent + "\n"
+			}
+			
+		}
+		
+		console.log(debug_str)
+	}
+	
+	// Logs a list of all messages and their constituents
+	debug_review_all_messages() {
+		let debug_str = ""
+		debug_str += "MESSAGES:\n"
+		for (let entity of Object.values(this.messages)) {
+			debug_str += entity + "\n"
+			for (let constituent of entity.constituents) {
+				debug_str += "  " + constituent + "\n"
+			}
+			
+		}
+		
+		console.log(debug_str)
+	}
+	
+	debug_review_all_entities() {
+		this.debug_review_all_primitives()
+		this.debug_review_all_composites()
+		this.debug_review_all_segments()
+		this.debug_review_all_messages()
 	}
 }

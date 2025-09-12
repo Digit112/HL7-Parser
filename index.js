@@ -9,11 +9,11 @@ async function construct_grammars(zip) {
 	for (let entry of entries) {
 		let [rel_path, zip_entry] = entry
 		
-		// Split the path to this file into componenets. The first component is the name of the zip file.
+		// Split the path to this file into components. The first component is the name of the zip file.
 		let path_parts = rel_path.split("/").filter(item => item != "")
 		
 		// Identify JSON files within subdirectories.
-		// Each sudirectory corresponds to an HL7 version, so JSON files in the top level directory have no interpretation.
+		// Each subdirectory corresponds to an HL7 version, so JSON files in the top level directory have no interpretation.
 		if (path_parts.length > 2 && path_parts[path_parts.length - 1].toLowerCase().endsWith(".json")) {
 			let version_number = path_parts[1]
 			
@@ -27,7 +27,8 @@ async function construct_grammars(zip) {
 				await HL7_versions[version_number].consume(grammar_definition, rel_path)
 			}
 			catch (err) {
-				if (err instanceof HL7GrammarError) HL7_versions[version_number].new_error(new HL7GrammarError(e.message, rel_path))
+				if (err instanceof HL7GrammarError) HL7_versions[version_number].new_error(new HL7GrammarError(err.message, rel_path))
+				else if (err instanceof SyntaxError) HL7_versions[version_number].new_error(new HL7GrammarError(err.message, rel_path))
 				else throw err
 			}
 		}

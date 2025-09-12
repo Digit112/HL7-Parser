@@ -1,7 +1,7 @@
 {
 	"COMPOSITE CE": {
 		"description": "Coded element",
-		"long-description": "This data type transmits codes and the text associated with the code. Coding schemse include lists of allergens, medicaitons, vaccines, illnesses, and much much more. This data type accomodates the parallel transmission of an equivalent code in an alternate or local coding scheme.",
+		"long-description": "This data type transmits codes and the text associated with the code. Coding schemes include lists of allergens, medications, vaccines, illnesses, and much much more. This data type accommodates the parallel transmission of an equivalent code in an alternate or local coding scheme.",
 		"from": "2.8.3",
 		"constituents": [{
 			"description": "Identifier",

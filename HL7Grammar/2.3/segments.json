@@ -53,7 +53,7 @@
 		},
 		{
 			"description": "Message Type",
-			"type": "CM",
+			"type": "CM_MSG",
 			"length": 7,
 			"optionality": "R"
 		},
