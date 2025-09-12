@@ -1,0 +1,49 @@
+{
+	"SEGMENT EVN": {
+		"description": "Event Type",
+		"long-description": "The EVN segment is used to communicate necessary trigger event information to receiving applications.",
+		"from": "3.3.1",
+		"constituents": [{
+			"description": "Event Type Code",
+			"long-description": "Retained for backwards compatibility only. Use MSH.9.2 to transmit this information.",
+			"from": "3.3.1.1",
+			"type": "ID",
+			"optionality": "B",
+			"table": "0003"
+		}, {
+			"description": "Recorded Date/Time",
+			"long-description": "Most systems will default to the system date/time when the transaction was entered, but they should also permit an override.",
+			"from": "3.3.1.2",
+			"type": "TS",
+			"optionality": "R"
+		}, {
+			"description": "Date/Time Planned Event",
+			"long-description": "This field contains the date/time that the event is planned. We recommend that the PV2-expected admit date and PV2-9-expected discharge date be used whenever possible.",
+			"from": "3.3.1.3",
+			"type": "TS",
+			"optionality": "O"
+		}, {
+			"description": "Event Reason Code",
+			"long-description": "This field contains the reason for this event (e.g., patient request, physician order, census management, etc.).",
+			"from": "3.3.1.4",
+			"type": "IS",
+			"length": 3,
+			"optionality": "O",
+			"table": "0062"
+		}, {
+			"description": "Operator ID",
+			"long-description": "This field identifies the individual responsible for triggering the event.",
+			"from": "3.3.1.5",
+			"type": "XCN",
+			"length": 60,
+			"optionality": "O",
+			"table": "0188"
+		}, {
+			"description": "Event Occurred",
+			"long-description": " This field contains the date/time that the event actually occurred. For example, on a transfer (A02 (transfer a patient)), this field would contain the date/time the patient was actually transferred. On a cancellation event, this field should contain the date/time that the event being canceled occurred.",
+			"from": "3.3.1.6",
+			"type": "TS",
+			"optionality": "O"
+		}]
+	}
+}

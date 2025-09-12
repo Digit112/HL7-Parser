@@ -1,0 +1,22 @@
+{
+	"PRIMITIVE": {},
+	"FAKEMETATYPE Bad Metatype": {},
+	"PRIMITIVE Bad Entity Body Type": "string body instead of object",
+	
+	"PRIMITIVE Redefined": {},
+	
+	"PRIMITIVE Bad Desc Type": {"description": 1},
+	"PRIMITIVE Bad Long Desc Type": {"long-description": 1},
+	"PRIMITIVE Bad From Type": {"from": 1},
+	"PRIMITIVE Bad Length Type": {"length": "100"},
+	
+	"COMPOSITE No Consts": {},
+	"COMPOSITE Bad Consts Type": {"constituents": {}},
+	"COMPOSITE Bad Desc Type": {"constituents": [], "description": 1},
+	"COMPOSITE Bad Long Desc Type": {"constituents": [], "long-description": 1},
+	"COMPOSITE Bad From Type": {"constituents": [], "from": 1},
+	"COMPOSITE Bad Length Type": {"constituents": [], "length": "100"},
+	
+	"COMPOSITE Bad Const Type": {"constituents": [{}]}
+	"COMPOSITE CONSSUBTYPE": {"constituents": [[]]}
+}

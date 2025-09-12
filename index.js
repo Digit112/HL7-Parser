@@ -1,4 +1,7 @@
 async function construct_grammars(zip) {
+	// Erase existing grammars
+	HL7_versions = {}
+	
 	// Iterate over the ZIP's contents. For every file ending in ".json", acquire the version and pass the file to the the HL7Grammar for parsing.
 	// Creates HL7 grammars for all the top-level directories it sees. Prunes the empty ones later if any.
 	let entries = []

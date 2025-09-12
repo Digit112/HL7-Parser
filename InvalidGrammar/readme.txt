@@ -1,0 +1,1 @@
+This grammar is to be used for testing, it intends to trigger all available errors that the grammar parser can produce.
