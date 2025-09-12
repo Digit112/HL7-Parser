@@ -71,9 +71,32 @@ The options "C", "B", and "W" are internally treated identically to optional ("O
 
 ### Nested constituents
 
-The `constituents` field is recursive, it can have constituents of its own. This models the HL7 concept of "segment groups" quite well. Many restrictions apply to this field, however. Firstly, that this feature is only valid on MESSAGE entities, since they are the only entities whose constituents are segments or segment groups (which are what we are grouping). Secondly, a constituent with a `constituents` field of its own must never have the `type`, `length`, or `table` attributes. Thirdly, the constituents of a constituent are always segments.
+The `constituents` field is recursive, it can have constituents of its own. This models the HL7 concept of "segment groups" quite well. Many restrictions apply to this field, however. Firstly, that this feature is only valid on MESSAGE entities, since they are the only entities whose constituents are segments or segment groups (which are what we are grouping). Secondly, a constituent with a `constituents` field of its own must never have the `type`, `length`, or `table` attributes. Thirdly, the constituents of a constituent are always segments (or segment groups).
 
 The `optionality` and `repeatability` fields are really the things that make this feature so valuable. A constituent segment group with two segments inside can be made optional while those two segments are each required within the group. Thus, the two segments must appear as a pair or not at all. Or the group can be made repeatable, such that the segments must always repeat together as a pair. 
+
+An early example is this constituent of MESSAGE ADT A01, an optional-repeatable group with a single required PR1 segment optionally followed by 1 or more required segments.
+
+```
+{
+	"optionality": "O",
+	"repeatability": -1,
+	"constituents": [{
+		"description": "Procedure",
+		"type": "PR1",
+		"optionality": "R"
+	}, {
+		"description": "Role",
+		"type": "ROL",
+		"optionality": "O",
+		"repeatability": -1
+	}]
+}
+```
+
+HL7 2.3 § 2.11 refers to segment groups as a part of their "special notation" for messages as a convenience for defining segments which must appear together. In fact, it is much more, and has enormous implications for the parsing of HL7 messages. The most immediate is that some messages have multiple instances of a given segment in different groups or have one in a group and another outside a group. Since HL7 was (somewhat implicitly) ambivalent to the segment ordering except of course for the MSH segment, segment groups make it impossible to determine which of two segments is which.
+
+To resolve this issue, later versions like HL7 2.5 § 2.5.2 impose restrictions on the ordering of fields in these situations. In short, two instances of a segment which are not repetitions of one another and which do not belong to a common group or which are both individual
 
 ## Tables
 
