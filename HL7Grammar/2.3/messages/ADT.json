@@ -57,6 +57,7 @@
 			"type": "DRG",
 			"optionality": "O"
 		}, {
+			"description": "Procedure Information",
 			"optionality": "O",
 			"repeatability": -1,
 			"constituents": [{

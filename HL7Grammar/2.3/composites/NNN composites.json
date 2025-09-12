@@ -1,0 +1,90 @@
+{
+	"COMPOSITE XCN": {
+		"description": "Extended Composite ID Number and Name for Persons",
+		"from": "2.8.46",
+		"constituents": [{
+			"description": "ID Number",
+			"long-description": "Coded ID according to a user-defined table, defined by the 8th component. If the first component is present, either the source table or the assigning authority must be valued.",
+			"from": "2.8.46.1",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Family Name",
+			"from": "2.8.46.2",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Given Name",
+			"from": "2.8.46.3",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Middle Initial or Name",
+			"from": "2.8.46.4",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Suffix",
+			"long-description": "Used to specify a name suffix (e.g., Jr. or III)."
+			"from": "2.8.46.5",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Prefix",
+			"long-description": "Used to specify a name prefix (e.g., Dr.)."
+			"from": "2.8.46.6",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Degree",
+			"long-description": "Used to specify an educational degree (e.g., MD)."
+			"from": "2.8.46.7",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Source Table",
+			"long-description": "Used to delineate the first component."
+			"from": "2.8.46.8",
+			"type": "IS",
+			"optionality": "C",
+			"table": "0207"
+		}, {
+			"description": "Assigning Authority",
+			"from": "2.8.46.9",
+			"type": "HD",
+			"optionality": "O"
+		}, {
+			"description": "Name Type Code",
+			"long-description": "A code that represents the type of name.",
+			"from": "2.8.46.10",
+			"type": "ID",
+			"optionality": "O",
+			"table": "0200"
+		}, {
+			"description": "Identifier Check Digit",
+			"long-description": "The check digit in this data type is not an add-on produced by the message processor. It is the check digit that is part of the identifying number used in the sending application. If the sending application does not include a self-generated check digit in the identifying number, this component should be valued null. Being valued null is not semantically equivalent to being empty."
+			"from": "2.8.46.11",
+			"type": "ST",
+			"optionality": "O"
+		}, {
+			"description": "Code Identifying the Check Digit Scheme Employed",
+			"from": "2.8.46.12",
+			"type": "ID",
+			"optionality": "O",
+			"table": "0060"
+		}, {
+			"description": "Identifier Type Code",
+			"long-description": "A code corresponding to the type of identifier. In some cases, this code may be used as a qualifier to the \"Assigning authority\" component.",
+			"from": "2.8.46.13",
+			"type": "IS",
+			"optionality": "O",
+			"table": "0203"
+		}, {
+			"description": "Assigning Facility",
+			"long-description": "The place or location identifier where the identifier was first assigned to the patient. This component is not an inherent part of the identifier but rather part of the history of the identifier: as part of this data type, its existence is a convenience for certain intercommunicating systems.",
+			"from": "2.8.46.14",
+			"type": "HD",
+			"optionality": "O"
+		}]
+	}
+}

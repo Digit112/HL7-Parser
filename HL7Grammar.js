@@ -11,6 +11,7 @@ class HL7GrammarError extends Error{
 class HL7Grammar {
 	constructor(version_id) {
 		this.version_id = version_id
+		this.consumption_completed = false
 		this.finalized = false
 		
 		this.grammar_syntax_errors = []
@@ -26,17 +27,20 @@ class HL7Grammar {
 	// Each entry defines an HL7 entity.
 	// The file_of_origin is used only in error messages.
 	async consume(definition, file_of_origin) {
-		if (this.finalized) throw new Error("Cannot consume additional HL7 grammar definitions after finalization.")
+		if (this.finalized || this.consumption_completed) throw new Error("Cannot consume additional HL7 grammar definitions after finalization.")
 			
 		for (let key in definition) {
 			let body = definition[key]
 			let [metatype, type_id] = key.split(" ", 2).map(item => item.trim())
 			
 			try {
+				if (type_id == null)
+					throw new HL7GrammarError(`Unable to extract type-id from entity definition \`${key}\`. It should take the form \`<metatype> <type-id>\`, with the space delimiter included.`, file_of_origin)
+				
 				// Check for redefinitions
 				let previous_def = this.get_entity(type_id)
 				if (previous_def != null)
-					throw new HL7GrammarError(`Redefinition of ${metatype} **${type_id}** (Previously defined ${previous_def.get_metatype()} **${type_id}** in ${previous_def.file_of_origin}.)`)
+					throw new HL7GrammarError(`Redefinition of ${metatype} **${type_id}** (Previously defined ${previous_def.get_metatype()} **${type_id}** in ${previous_def.file_of_origin}.)`, file_of_origin)
 				
 				// Attempt construction of appropriate entity
 				if (metatype == "PRIMITIVE") {
@@ -51,6 +55,11 @@ class HL7Grammar {
 				else if (metatype == "MESSAGE") {
 					this.messages[type_id] = new HL7Message(type_id, body, file_of_origin, this)
 				}
+				else if (metatype == "TABLE") {
+				}
+				else {
+					throw new HL7GrammarError(`Invalid metatype \`${metatype}\` from entity definition \`${key}\`. It should be one of \`MESSAGE\`, \`SEGMENT\`, \`COMPOSITE\`, \`PRIMITIVE\`, or \`TABLE\`.`, file_of_origin)
+				}
 			}
 			catch (err) {
 				if (err instanceof HL7GrammarError) this.new_error(err)
@@ -61,7 +70,9 @@ class HL7Grammar {
 	
 	// Performs checks of metatypes and reference integrity, which can only be done after we know for sure that all JSON files have been read (hence, finalize())
 	finalize() {
-		if (this.finalized) throw new Error("Cannot finalize an HL7Grammar twice.")
+		if (this.finalized) throw new Error("Cannot finalize an HL7Grammar more than once.")
+		
+		this.consumption_completed = true
 			
 		// Check that all constituents are types that exist and that their metatypes are valid.
 		for (let composite of Object.values(this.composites)) {
@@ -78,10 +89,12 @@ class HL7Grammar {
 		// Ensure no constituent has a length greater than its base type
 		
 		// Set the length on all tables
-		// Set the length on all table-referencing fields based on the tables.
+		// Set length on all composite constituents, these will be their own values, the value of the backing table if any, or the value of the backing type.
+		// Set length on all composite metatypes - that is, all segment constituents. Each is the sum of the precalculated lengths plus allowances for delimiters.
+		// Set length on all segment metatypes - that is *NOT* all message constituents, since message constituents are sometimes segment *groups*
 		// Set the length of all non-primitives based on their constituents.
 		
-		this.finalize = true
+		this.finalized = true
 	}
 	
 	// Returns the entity identified by the passed type_id if it exists, null otherwise.
