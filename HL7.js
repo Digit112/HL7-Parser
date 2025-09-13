@@ -17,6 +17,57 @@ class HL7Entity {
 		this.file_of_origin = file_of_origin
 		this.grammar = grammar
 	}
+	
+	// Returns the value corresponding to the passed key on the passed dictionary
+	// if it exists, or the default otherwise.
+	// Throws an HL7GrammarError if the type of the read value doesn't match the specified type.
+	// Will also throw if numeric values don't fall in the passed range.
+	attempt_read(body, type, key, my_name, default_value=null, min_value=-Infinity, max_value=+Infinity) {
+		if (!["boolean", "integer", "float", "string", "array", "object"].includes(type))
+			throw new Error(`Invalid type '${type}' passed to attempt_read()`)
+		
+		if (max_value < min_value)
+			throw new Error("max_value must not be less than min_value.")
+		
+		if (key in body) {
+			let value = body[key]
+			
+			// Figure out the exact type of this value, noting a difference between integers and floats.
+			let type_of_value = Array.isArray(value) ? "array" : typeof value
+			if (type_of_value == "number") {
+				if (Number.isInteger(value))
+					type_of_value = "integer"
+				else
+					type_of_value = "float"
+			}
+			
+			if (type_of_value != type && !(type_of_value == "integer" && type == "float")) // Note an integer is acceptable in a float field.
+				throw new HL7GrammarError(`Field '${key}' on ${my_name} specification must be of type '${type}', not '${type_of_value}'.`, this.file_of_origin)
+			
+			if ((type == "integer" || type == "float") && (value < min_value || value > max_value)) {
+				let range_text = null
+				if (min_value > -Infinity) {
+					if (max_value < Infinity)
+						range_text = `greater than ${min_value} and less than ${max_value}`
+					else
+						range_text = `greater than ${min_value}`
+				}
+				else {
+					if (max_value < Infinity)
+						range_text = `less than ${max_value}`
+					else
+						console.assert(false, "Type is apparently less than -Infinity or greater than +Infinity.")
+				}
+				
+				throw new HL7GrammarError(`Field '${key}' on ${my_name} specification must be ${range_text}.`)
+			}
+			
+			return value
+		}
+		else {
+			return default_value
+		}
+	}
 }
 
 class HL7Primitive extends HL7Entity {
@@ -71,13 +122,13 @@ class HL7Primitive extends HL7Entity {
 // Represents the children of a non-primitive entity, that is, a composite, segment, or message.
 // The index is as per the HL7 specification, being 1-based, and used in dot notation as in "MSH.11
 // The parent fields and file_of_origin field are used in error reporting.
-class HL7Constituent {
+class HL7Constituent extends HL7Entity {
 	constructor(first_constituent_id, body, parent_metatype, parent_type_id, file_of_origin, grammar) {
+		super("CONSTITUENT", file_of_origin, grammar)
+		
 		this.index = first_constituent_id
 		this.parent_metatype = parent_metatype
 		this.parent_type_id = parent_type_id
-		this.file_of_origin = file_of_origin
-		this.grammar = grammar
 		
 		// If this is an individual constituent, this is equal to the value of first_consituent_id that was passed to the constructor.
 		// Otherwise, if this is a segment grup, it's that same number plus the total number of segments descending from this segmeent group, minus 1.
@@ -90,26 +141,9 @@ class HL7Constituent {
 		if (typeof body != "object" || Array.isArray(body))
 			throw new HL7GrammarError(`${my_name} specification must be of type 'object'.`, file_of_origin)
 		
-		if ("description" in body) {
-			if (typeof body["description"] != "string")
-				throw new HL7GrammarError(`Field 'description' on ${my_name} specification must be of type 'string', not '${typeof body["description"]}'.`, file_of_origin)
-			this.description = body["description"]
-		}
-		else this.description = ""
-		
-		if ("long-description" in body) {
-			if (typeof body["long-description"] != "string")
-				throw new HL7GrammarError(`Field 'long-description' on ${my_name} specification must be of type 'string', not '${typeof ["long-description"]}'.`, file_of_origin)
-			this.long_description = body["long-description"]
-		}
-		else this.long_description = ""
-		
-		if ("from" in body) {
-			if (typeof body["from"] != "string")
-				throw new HL7GrammarError(`Field 'from' on ${my_name} specification must be of type 'string', not '${typeof body["from"]}'.`, file_of_origin)
-			this.from = body["from"]
-		}
-		else this.from = ""
+		this.description = this.attempt_read(body, "string", "description", my_name, "")
+		this.long_description = this.attempt_read(body, "string", "long-description", my_name, "")
+		this.from = this.attempt_read(body, "string", "from", my_name, "")
 		
 		if ("optionality" in body) {
 			if (typeof body["optionality"] != "string")
@@ -208,8 +242,18 @@ class HL7Constituent {
 					throw new HL7GrammarError(`'${constituent_name}' specifies type ${this.type}, which does not exist.`, this.file_of_origin)
 				
 				if (!valid_types.includes(underlying_type.get_metatype())) {
-					// Note the lack of support for more than two valid metatypes. It's not like it's gonna change anytime soon. Surely.
-					let acceptable_metatypes_text = valid_types.length == 1 ? valid_types[0] : `${valid_types[0]} or ${valid_types[1]}`
+					// Generate textual representation of valid types list.
+					let acceptable_metatypes_text = valid_types[0]
+					for (let i = 1; i < valid_types.length; i++) {
+						if (i == valid_types.length-1)
+							acceptable_metatypes_text += ", or "
+						else
+							acceptable_metatypes_text += ", "
+						
+						acceptable_metatypes_text += valid_types[i]
+					}
+					
+					
 					throw new HL7GrammarError(`'${constituent_name}' specifies type ${this.type} (of ${underlying_type.file_of_origin}), which is of metatype ${underlying_type.get_metatype()}, not ${acceptable_metatypes_text}.`, this.file_of_origin)
 				}
 			}
@@ -317,26 +361,9 @@ class HL7NonPrimitive extends HL7Entity {
 		if (typeof body != "object" || Array.isArray(body))
 			throw new HL7GrammarError(`${my_name} specification must be of type 'object'.`, file_of_origin)
 		
-		if ("description" in body) {
-			if (typeof body["description"] != "string")
-				throw new HL7GrammarError(`Field 'description' on ${my_name} specification must be of type 'string', not '${typeof body["description"]}'.`, file_of_origin)
-			this.description = body["description"]
-		}
-		else this.description = ""
-		
-		if ("long-description" in body) {
-			if (typeof body["long-description"] != "string")
-				throw new HL7GrammarError(`Field 'long-description' on ${my_name} specification must be of type 'string', not '${typeof body["long-description"]}'.`, file_of_origin)
-			this.long_description = body["long-description"]
-		}
-		else this.long_description = ""
-		
-		if ("from" in body) {
-			if (typeof body["from"] != "string")
-				throw new HL7GrammarError(`Field 'from' on ${my_name} specification must be of type 'string', not '${typeof body["from"]}'.`, file_of_origin)
-			this.from = body["from"]
-		}
-		else this.from = ""
+		this.description = this.attempt_read(body, "string", "description", my_name, "")
+		this.long_description = this.attempt_read(body, "string", "long-description", my_name, "")
+		this.from = this.attempt_read(body, "string", "from", my_name, "")
 		
 		if ("constituents" in body) {
 			if (!Array.isArray(body["constituents"]))
@@ -375,8 +402,20 @@ class HL7NonPrimitive extends HL7Entity {
 	}
 }
 
-// A composite can appear as the subcomponent of a segment alongside primitives.
-// The components of a composite are always primitives, and are delimited by the subcomponent separator.
+// A subcomposite can appear as the subcomponent of a segment or composite, alongside primitives.
+// The constituents of a subcomposite are always primitives.
+class HL7Subcomposite extends HL7NonPrimitive {
+	constructor(type_id, body, file_of_origin, grammar) {
+		super(type_id, body, "SUBCOMPOSITE", file_of_origin, grammar)
+	}
+	
+	get_metatype() {
+		return "SUBCOMPOSITE"
+	}
+}
+
+// A composite can appear as the subcomponent of a segment alongside primitives and subcomposites.
+// The constituents of a composite may be subcomposites or primitives.
 class HL7Composite extends HL7NonPrimitive {
 	constructor(type_id, body, file_of_origin, grammar) {
 		super(type_id, body, "COMPOSITE", file_of_origin, grammar)
@@ -388,9 +427,8 @@ class HL7Composite extends HL7NonPrimitive {
 }
 
 // An HL7 Segment is a single line in an HL7 message.
-// It contains delimited fields, sub-fields.
-// The delimiters depend on the message and must be passed to this function UNLESS the segment is an MSH (Message Header) segment,
-// from which the delimiters are read, which is always the first segment in a message.
+// It contains delimited fields with their own components and subcomponents.
+// The constituents of a segment may be composites, subcomposites, or primitives.
 class HL7Segment extends HL7NonPrimitive {
 	constructor(type_id, body, file_of_origin, grammar) {
 		super(type_id, body, "SEGMENT", file_of_origin, grammar)
@@ -412,5 +450,61 @@ class HL7Message extends HL7NonPrimitive {
 	
 	get_metatype() {
 		return "MESSAGE"
+	}
+}
+
+class HL7Table extends HL7Entity {
+	constructor(type_id, body, file_of_origin, grammar) {
+		super(type_id, file_of_origin, grammar)
+		
+		let my_name = `TABLE ${type_id}`
+		
+		this.description = this.attempt_read(body, "string", "description", my_name, "")
+		this.long_description = this.attempt_read(body, "string", "long-description", my_name, "")
+		this.from = this.attempt_read(body, "string", "from", my_name, "")
+		
+		this.length = this.attempt_read(body, "integer", "length", my_name, null, 0, Infinity)
+		
+		if (!("values" in body))
+			throw new HL7GrammarError(`Mandatory field 'values' on ${my_name} specification is missing.`, file_of_origin)
+		
+		let values = body["values"]
+		if (typeof values != "object")
+			throw new HL7GrammarError(`Field 'values' on ${my_name} specification must be object or array, not ${typeof values}.`, file_of_origin)
+		
+		// key-value pairs appear as array of 2-tuples.
+		if (Array.isArray(values)) {
+			for (let pair of values) {
+				if (!Array.isArray(pair))
+					throw new HL7GrammarError(`Field 'values' on ${my_name} specification, when it is an array, must contain only arrays.`, file_of_origin)
+				
+				if (pair.length != 2)
+					throw new HL7GrammarError(`Field 'values' on ${my_name} specification, when it is an array, must contain only arrays of length 2 (key-value pairs), not ${pair.length}.`, file_of_origin)
+				
+				for (let i = 0; i < 2; i++) {
+					let index_string = i == 0 ? "keys" : "values"
+					if (typeof pair[i] != "string" && !Array.isArray(pair[i]))
+						throw new HL7GrammarError(`${index_string} in field 'values' on ${my_name} specification, must always be a string or array, not ${typeof pair[i]}.`, file_of_origin)
+				}
+				
+				this.values = values
+			}
+		}
+		// key-value pairs appear as dictionary
+		else {
+			for (let key in values) {
+				if (typeof values[key] != "string" && !Array.isArray(values[key]))
+					throw new HL7GrammarError(`${index_string} in field 'values' on ${my_name} specification, must always be a string or array, not ${typeof pair[i]}.`, file_of_origin)
+			}
+			
+			this.values = []
+			for (let key in values) {
+				this.values.push([key, values[key]])
+			}
+		}
+	}
+	
+	get_metatype() {
+		return "TABLE"
 	}
 }

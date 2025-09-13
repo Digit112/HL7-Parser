@@ -1,4 +1,6 @@
 {
+	"SEGMENT Valid Segment": {"constituents": []},
+	
 	"PRIMITIVE": {},
 	"FAKEMETATYPE Bad Metatype": {},
 	"PRIMITIVE Bad Entity Body Type": "string body instead of object",
@@ -17,6 +19,8 @@
 	"COMPOSITE Bad From Type": {"constituents": [], "from": 1},
 	"COMPOSITE Bad Length Type": {"constituents": [], "length": "100"},
 	
-	"COMPOSITE Bad Const Type": {"constituents": [{}]}
-	"COMPOSITE CONSSUBTYPE": {"constituents": [[]]}
+	"COMPOSITE No Const Sub Type": {"constituents": [{}]},
+	"COMPOSITE Bad Const Sub Type": {"constituents": [[]]},
+	
+	"SEGMENT Bad Const Sub Metatype": {"constituents": [{"type": "Valid Segment", "optionality": "R"}]}
 }

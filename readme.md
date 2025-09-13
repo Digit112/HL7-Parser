@@ -1,32 +1,26 @@
 # HL7 Grammar Specification Documents
 
-The HL7 Grammar specification folder contains JSON files defining the available messages, segments, composites, primitives, and tables, each is called an "HL7 Entity". These definitions are separated into folders corresponding to their respective HL7 version as it would appear in the Verssion ID segment of an MSH header (see table 0104).
+The HL7 Grammar specification folder contains JSON files defining the available messages, segments, composites, subcomposites, primitives, and tables, each is called an "HL7 Entity". These definitions are separated into folders corresponding to their respective HL7 version as it would appear in the Version ID segment of an MSH header (see table 0104).
 
 These definitions all look like key-value pairs with a key having a metatype part and a type-id part, separated by a space, the type-id itself can also have spaces.
 
-An HL7 message is split into segments which are themselves subdivided into components, these components may be a composite (split into subcomponents) or a primitive. Subcomponents must be primitives.
+An HL7 message is split into segments which are themselves subdivided into components, these components may be a composite, subcomposite, or primitive. A composite may be made of subcomposites and primitives, while a subcomposite may only consist of primitives.
 
-| Depth | Field Name      | Metatypes that can occupy this field |
-| :---: | :-------------- | :----------------------------------- |
-| 0     | Message         | MESSAGE                              |
-| 1     | Segment         | SEGMENT                              |
-| 2     | Component       | COMPOSITE, PRIMITIVE                 |
-| 3     | Subcomponent    | PRIMITIVE                            |
+| Depth | Field Name   | Metatypes that can occupy this field | Can be constituents of  |
+| :---: | :----------- | :----------------------------------- | :---------------------- |
+| 0     | Message      | MESSAGE                              |                         |
+| 1     | Segment      | SEGMENT                              | MESSAGE                 |
+| 2     | Field        | COMPOSITE, SUBCOMPOSITE, PRIMITIVE   | SEGMENT                 |
+| 3     | Component    | SUBCOMPOSITE, PRIMITIVE              | COMPOSITE               |
+| 4     | Subcomponent | PRIMITIVE                            | SUBCOMPOSITE, PRIMITIVE |
 
-Think of a metatype (which isn't a real HL7 concept by the way) as categorizations that all HL7 types - including segments and messages themselves - fall into. They govern the way in which the type hierarchy can be arranged. 
+Think of a metatype (which isn't a real HL7 concept by the way) as categorizations that all HL7 types - including segments and messages themselves - fall into. They govern the way in which the type hierarchy can be arranged.
 
-*For example*, because a segment is divided into components, and all components must have metatype of COMPOSITE or PRIMITIVE, a segment's constituents must never have a metatype of MESSAGE. For example, if you specify that an "MSH" segment has a constituent of type "ORU R01", the metatype checker will see that this is invalid and yell at you, even though this grammar is not logically contradictory.
-
-| Depth | Particle Type | Particles of that type             |
-| :---: | :------------ | :--------------------------------- |
-| 0     | Molecule      | Molecules                          |
-| 1     | Atom          | Atoms                              |
-| 2     | Subatomic     | Protons/Neutrons, Quarks/Electrons |
-| 3     | Fundamental   | Quarks/Electrons                   |
+*For example*, because a segment is divided into fields, and all fields must have metatype of COMPOSITE, SUBCOMPOSITE, or PRIMITIVE, a segment's constituents must never have a metatype of MESSAGE. For example, if you specify that an "MSH" segment has a constituent of type "ORU R01", the metatype checker will see that this is invalid and yell at you, even though this grammar is not logically contradictory.
 
 ## Messages, Segments, Composites, & Primitives
 
-The definitions for Messages, Segments, Composites, and Primitives are shown below. Note that the former three are specified as a collection of what my implementation calls its "constituents".
+The definitions for Messages, Segments, Composites, Subcomposites, and Primitives are shown below. Note that the first four are specified as a collection of what my implementation calls their "constituents".
 
 ```
 "PRIMITIVE <type-id>": {
@@ -38,7 +32,7 @@ The definitions for Messages, Segments, Composites, and Primitives are shown bel
 ```
 
 ```
-"<MESSAGE | SEGMENT | COMPOSITE> <type-id>": {
+"<MESSAGE | SEGMENT | COMPOSITE | SUBCOMPOSITE> <type-id>": {
 	"description": "<description>",
 	"long-description": "<long description>",
 	"from": "<section>",
@@ -59,15 +53,17 @@ The definitions for Messages, Segments, Composites, and Primitives are shown bel
 }
 ```
 
-In both cases, the `type-id` key is the unique identifier for this message, segment, or data type as defined by HL7. Examples include "ORU R01", "MSH", and "ST".
+As you can see, the definitions for MESSAGE, SEGMENT, COMPOSITE, and SUBCOMPOSITE are so similar that they've been grouped into a single syntax. These four are called the "non-primitives", a category which (despite its name) excludes tables. This mirrors the internal structure of the implementation, *but* the definitions are not identical, all fields are not valid for all non-primitive metatypes.
+
+In all cases, the `type-id` key is the unique identifier for this message, segment, or data type as defined by HL7. Examples include "ORU R01", "MSH", and "ST".
 
 The `description`, `long-description`, and `from` fields are all basically the same - will be displayed to the user, typically come straight from the HL7 documentation (perhaps elided), and default to an empty string. `description` should be only a few words, whereas `long-description` may be anywhere from a short sentence to a paragraph and is used to explain semantics and edge cases. `from` is a dot-delimited specifier for a section of the HL7 specification, for example `"2.A.33.1"` which describes the Namespace ID field of the Hierarchic designator composite.
 
-The constituent `type` field must match the `type-id` key on some other definition.
+The constituent `type` field must match the `type-id` key on some other definition. That type's metatype must be valid as per the metatype checking rules summarized in the table above.
 
-The `length` fields are optional. In the primitive definition, excluding the length causes it to default to infinity ("length" really means "maximum length"). In the composite definition, you specify the lengths of each constituent. Excluding the length causes it to inherit the length on the table, if specified, or the type of the constituent if not, this is common since the length of a constituent is often the length of its type.
+The `length` fields are optional. In the primitive definition, excluding the length causes it to default to infinity ("length" really means "maximum length"). In the non-primitive definitions, you specify the lengths of each constituent. Excluding the length causes it to inherit the length on the table, if specified, or the type of the constituent if not, this is common since the length of a constituent is often just the length of its type.
 
-The length of an entire messsage, segment, or composite is always the sum of the lengths of the constituents plus the number of delimiters needed to separate them. It cannot be manually specified.
+The length of an entire non-primitive is always the sum of the lengths of the constituents plus the number of delimiters needed to separate them. It cannot be manually specified.
 
 The values for `optionality` correspond to "Optional", "Conditional", "Required", "Backward Compatible", and "Withdrawn".
 The options "C", "B", and "W" are internally treated identically to optional ("O"), but are conformant with the specification and also provide information to readers of the file.
@@ -78,7 +74,7 @@ The options "C", "B", and "W" are internally treated identically to optional ("O
 
 ### Nested constituents
 
-The `constituents` field is recursive, it can have constituents of its own. This models the HL7 concept of "segment groups" quite well. Many restrictions apply to this field, however. Firstly, that this feature is only valid on MESSAGE entities, since they are the only entities whose constituents are segments or segment groups (which are what we are grouping). Secondly, a constituent with a `constituents` field of its own must never have the `type`, `length`, or `table` attributes. Thirdly, the constituents of a constituent are always segments (or segment groups).
+The `constituents` field is recursive, it can have constituents of its own. This models the HL7 concept of "segment groups" quite well. Many restrictions apply to this field, however. Firstly, that this feature is only valid on MESSAGE entities, since they are the only entities whose constituents are segments or segment groups (which are what we are grouping). Secondly, a constituent with a `constituents` field of its own must never have the `type`, `length`, or `table` attributes. Thirdly, the constituents of a constituent are always segments (or yet more segment groups).
 
 The `optionality` and `repeatability` fields are really the things that make this feature so valuable. A constituent segment group with two segments inside can be made optional while those two segments are each required within the group. Thus, the two segments must appear as a pair or not at all. Or the group can be made repeatable, such that the segments must always repeat together as a pair. 
 

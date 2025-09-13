@@ -1,5 +1,5 @@
 {
-	"COMPOSITE CM_MSG": {
+	"SUBCOMPOSITE CM_MSG": {
 		"description": "Message type",
 		"long-description": "Contains the message type and trigger event for the message.",
 		"from": "2.24.1.9",

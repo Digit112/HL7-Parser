@@ -18,6 +18,7 @@ class HL7Grammar {
 		
 		this.tables = {}
 		this.primitives = {}
+		this.subcomposites = {}
 		this.composites = {}
 		this.segments = {}
 		this.messages = {}
@@ -30,21 +31,30 @@ class HL7Grammar {
 		if (this.finalized || this.consumption_completed) throw new Error("Cannot consume additional HL7 grammar definitions after finalization.")
 			
 		for (let key in definition) {
-			let body = definition[key]
-			let [metatype, type_id] = key.split(" ", 2).map(item => item.trim())
 			
 			try {
-				if (type_id == null)
+				let delim = key.indexOf(" ")
+				
+				if (delim == -1)
 					throw new HL7GrammarError(`Unable to extract type-id from entity definition \`${key}\`. It should take the form \`<metatype> <type-id>\`, with the space delimiter included.`, file_of_origin)
+				
+				let metatype = key.substr(0, delim)
+				let type_id = key.substring(delim+1)
 				
 				// Check for redefinitions
 				let previous_def = this.get_entity(type_id)
 				if (previous_def != null)
 					throw new HL7GrammarError(`Redefinition of ${metatype} **${type_id}** (Previously defined ${previous_def.get_metatype()} **${type_id}** in ${previous_def.file_of_origin}.)`, file_of_origin)
 				
+				// Get definition
+				let body = definition[key]
+				
 				// Attempt construction of appropriate entity
 				if (metatype == "PRIMITIVE") {
 					this.primitives[type_id] = new HL7Primitive(type_id, body, file_of_origin, this)
+				}
+				else if (metatype == "SUBCOMPOSITE") {
+					this.subcomposites[type_id] = new HL7Subcomposite(type_id, body, file_of_origin, this)
 				}
 				else if (metatype == "COMPOSITE") {
 					this.composites[type_id] = new HL7Composite(type_id, body, file_of_origin, this)
@@ -58,7 +68,7 @@ class HL7Grammar {
 				else if (metatype == "TABLE") {
 				}
 				else {
-					throw new HL7GrammarError(`Invalid metatype \`${metatype}\` from entity definition \`${key}\`. It should be one of \`MESSAGE\`, \`SEGMENT\`, \`COMPOSITE\`, \`PRIMITIVE\`, or \`TABLE\`.`, file_of_origin)
+					throw new HL7GrammarError(`Invalid metatype \`${metatype}\` from entity definition \`${key}\`. It should be one of \`MESSAGE\`, \`SEGMENT\`, \`COMPOSITE\`, \`SUBCOMPOSITE\`, \`PRIMITIVE\`, or \`TABLE\`.`, file_of_origin)
 				}
 			}
 			catch (err) {
@@ -75,11 +85,14 @@ class HL7Grammar {
 		this.consumption_completed = true
 			
 		// Check that all constituents are types that exist and that their metatypes are valid.
+		for (let subcomposite of Object.values(this.subcomposites)) {
+			subcomposite.validate_constituents(["PRIMITIVE"])
+		}
 		for (let composite of Object.values(this.composites)) {
-			composite.validate_constituents(["PRIMITIVE"])
+			composite.validate_constituents(["SUBCOMPOSITE", "PRIMITIVE"])
 		}
 		for (let segment of Object.values(this.segments)) {
-			segment.validate_constituents(["COMPOSITE", "PRIMITIVE"])
+			segment.validate_constituents(["COMPOSITE", "SUBCOMPOSITE", "PRIMITIVE"])
 		}
 		for (let message of Object.values(this.messages)) {
 			message.validate_constituents(["SEGMENT"])
@@ -104,6 +117,9 @@ class HL7Grammar {
 		}
 		else if (type_id in this.primitives) {
 			return this.primitives[type_id]
+		}
+		else if (type_id in this.subcomposites) {
+			return this.subcomposites[type_id]
 		}
 		else if (type_id in this.composites) {
 			return this.composites[type_id]
@@ -147,6 +163,21 @@ class HL7Grammar {
 		debug_str += "PRIMITIVES:\n"
 		for (let entity of Object.values(this.primitives)) {
 			debug_str += entity.toString() + "\n"
+		}
+		
+		console.log(debug_str)
+	}
+	
+	// Logs a list of all subcomposites and their constituents
+	debug_review_all_subcomposites() {
+		let debug_str = ""
+		debug_str += "SUBCOMPOSITES:\n"
+		for (let entity of Object.values(this.subcomposites)) {
+			debug_str += entity + "\n"
+			for (let constituent of entity.constituents) {
+				debug_str += "  " + constituent + "\n"
+			}
+			
 		}
 		
 		console.log(debug_str)
@@ -199,6 +230,7 @@ class HL7Grammar {
 	
 	debug_review_all_entities() {
 		this.debug_review_all_primitives()
+		this.debug_review_all_subcomposites()
 		this.debug_review_all_composites()
 		this.debug_review_all_segments()
 		this.debug_review_all_messages()

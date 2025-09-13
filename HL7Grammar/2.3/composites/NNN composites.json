@@ -25,25 +25,25 @@
 			"optionality": "O"
 		}, {
 			"description": "Suffix",
-			"long-description": "Used to specify a name suffix (e.g., Jr. or III)."
+			"long-description": "Used to specify a name suffix (e.g., Jr. or III).",
 			"from": "2.8.46.5",
 			"type": "ST",
 			"optionality": "O"
 		}, {
 			"description": "Prefix",
-			"long-description": "Used to specify a name prefix (e.g., Dr.)."
+			"long-description": "Used to specify a name prefix (e.g., Dr.).",
 			"from": "2.8.46.6",
 			"type": "ST",
 			"optionality": "O"
 		}, {
 			"description": "Degree",
-			"long-description": "Used to specify an educational degree (e.g., MD)."
+			"long-description": "Used to specify an educational degree (e.g., MD).",
 			"from": "2.8.46.7",
 			"type": "ST",
 			"optionality": "O"
 		}, {
 			"description": "Source Table",
-			"long-description": "Used to delineate the first component."
+			"long-description": "Used to delineate the first component.",
 			"from": "2.8.46.8",
 			"type": "IS",
 			"optionality": "C",
@@ -62,7 +62,7 @@
 			"table": "0200"
 		}, {
 			"description": "Identifier Check Digit",
-			"long-description": "The check digit in this data type is not an add-on produced by the message processor. It is the check digit that is part of the identifying number used in the sending application. If the sending application does not include a self-generated check digit in the identifying number, this component should be valued null. Being valued null is not semantically equivalent to being empty."
+			"long-description": "The check digit in this data type is not an add-on produced by the message processor. It is the check digit that is part of the identifying number used in the sending application. If the sending application does not include a self-generated check digit in the identifying number, this component should be valued null. Being valued null is not semantically equivalent to being empty.",
 			"from": "2.8.46.11",
 			"type": "ST",
 			"optionality": "O"
