@@ -1,7 +1,7 @@
 {
 	"TABLE 0076": {
 		"description": "Message type",
-		"long-description": "A list of message types usedto transmit data, queries, acknowledgements, etc. between systems.",
+		"long-description": "A list of message types used to transmit data, queries, acknowledgments, etc. between systems.",
 		"from": "2.24.1.9",
 		"values": {
 			"ACK": "General acknowledgement message",

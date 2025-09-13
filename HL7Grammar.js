@@ -66,6 +66,7 @@ class HL7Grammar {
 					this.messages[type_id] = new HL7Message(type_id, body, file_of_origin, this)
 				}
 				else if (metatype == "TABLE") {
+					this.tables[type_id] = new HL7Table(type_id, body, file_of_origin, this)
 				}
 				else {
 					throw new HL7GrammarError(`Invalid metatype \`${metatype}\` from entity definition \`${key}\`. It should be one of \`MESSAGE\`, \`SEGMENT\`, \`COMPOSITE\`, \`SUBCOMPOSITE\`, \`PRIMITIVE\`, or \`TABLE\`.`, file_of_origin)
@@ -98,10 +99,11 @@ class HL7Grammar {
 			message.validate_constituents(["SEGMENT"])
 		}
 		
-		// Set lengths on all constituents.
-		// Ensure no constituent has a length greater than its base type
-		
 		// Set the length on all tables
+		for (let table of Object.values(this.tables)) {
+			table.cache_length()
+		}
+		
 		// Set length on all composite constituents, these will be their own values, the value of the backing table if any, or the value of the backing type.
 		// Set length on all composite metatypes - that is, all segment constituents. Each is the sum of the precalculated lengths plus allowances for delimiters.
 		// Set length on all segment metatypes - that is *NOT* all message constituents, since message constituents are sometimes segment *groups*
@@ -155,6 +157,11 @@ class HL7Grammar {
 		errors_div.replaceChildren(...error_paragraphs)
 		
 		return errors_div
+	}
+	
+	explain(type_id) {
+		let entity = this.get_entity(type_id)
+		entity.explain()
 	}
 	
 	// Logs a list of all known entities on this grammar to the console.

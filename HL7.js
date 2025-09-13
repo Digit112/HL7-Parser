@@ -115,7 +115,20 @@ class HL7Primitive extends HL7Entity {
 	}
 	
 	toString() {
-		return `${this.type_id} - ${this.description}${isFinite(this.length) ? ` (<=${this.length})` : ""}`
+		let description_text = this.description != "" ? " - " + this.description : ""
+		let length_text = isFinite(this.length) && this.length != null ? " LEN " + this.length.toString().padStart(3, " ") : "        "
+		return `${this.type_id}${length_text}${description_text}`
+	}
+	
+	explain() {
+		let explanation = this.get_metatype() + " " + this.toString()
+		
+		let long_desc = ""
+		if (this.long_description != "") long_desc += this.long_description + "\n"
+		if (this.from != "") long_desc += "From " + this.grammar.version_id + " § " + this.from + "\n"
+		if (long_desc != "") explanation += "\n" + long_desc
+		
+		console.log(explanation)
 	}
 }
 
@@ -346,6 +359,31 @@ class HL7Constituent extends HL7Entity {
 	toString() {
 		return `${this.parent_type_id}.${this.index} - ${this.description} (${this.type})${isFinite(this.length) ? ` (<=${this.length})` : ""}`
 	}
+	
+	toString() {
+		let length_text = isFinite(this.length) && this.length != null ? "LEN " + this.length.toString().padStart(3, "0") + " " : "LEN INF "
+		let optionality_text = this.optionality == "R" ? "REQ " : "OPT "
+		let repeatability_text = isFinite(this.repeatability) ? "REP " + this.repeatability.toString().padStart(3, "0") + " " : "REP INF "
+		let description_text = this.description != null ? " - " + this.description : ""
+		return `${length_text}${optionality_text}${repeatability_text}(${this.type})${description_text}`
+	}
+	
+	explain() {
+		let explanation = this.get_metatype() + " " + this.toString()
+		
+		let long_desc = ""
+		if (this.long_description != "") long_desc += this.long_description + "\n"
+		if (this.from != "") long_desc += "From " + this.grammar.version_id + " § " + this.from
+		if (long_desc != "") explanation += "\n" + long_desc
+		
+		explanation += "\n"
+		
+		for (let constituent of this.constituents) {
+			explanation += "  " + constituent + "\n"
+		}
+		
+		console.log(explanation)
+	}
 }
 
 // Base class for composites, segments, and messages, which are internally all basically the same.
@@ -398,7 +436,24 @@ class HL7NonPrimitive extends HL7Entity {
 	}
 	
 	toString() {
-		return `${this.type_id} - ${this.description}${isFinite(this.length) ? ` (<=${this.length})` : ""}`
+		let description_text = this.description != null ? " - " + this.description : ""
+		let length_text = isFinite(this.length) ? " LEN " + this.length.toString().padStart(3, " ") : " LEN INF"
+		return `${this.type_id}${length_text}${description_text}`
+	}
+	
+	explain() {
+		let explanation = this.get_metatype() + " " + this.toString()
+		
+		let long_desc = ""
+		if (this.long_description != "") long_desc += this.long_description + "\n"
+		if (this.from != "") long_desc += "From " + this.grammar.version_id + " § " + this.from
+		if (long_desc != "") explanation += "\n" + long_desc
+		
+		for (let constituent of this.constituents) {
+			explanation += "  " + constituent + "\n"
+		}
+		
+		console.log(explanation)
 	}
 }
 
@@ -504,7 +559,52 @@ class HL7Table extends HL7Entity {
 		}
 	}
 	
+	cache_length() {
+		let max_length = 0
+		for (let pair of this.values) {
+			if (typeof(pair[0]) == "string") {
+				var key_length = pair[0].length
+			}
+			else {
+				var key_length = pair[0].reduce((acc, item) => acc + item.length, 0) + pair[0].length - 1
+			}
+			
+			if (key_length > max_length) max_length += key_length
+		}
+		
+		if (this.length != null) {
+			if (this.length < max_length)
+				throw new HL7GrammarError(`Explicitly specified length on TABLE ${this.type_id} specification is insufficient to represent the values of the table (${this.length} < ${max_length}).`, file_of_origin)
+		}
+		else {
+			this.length = key_length
+		}
+	}
+	
 	get_metatype() {
 		return "TABLE"
+	}
+	
+	toString() {
+		let description_text = this.description != null ? " - " + this.description : ""
+		let length_text = isFinite(this.length) && this.length != null ? " LEN " + this.length.toString().padStart(3, " ") : " LEN INF"
+		return `${this.type_id}${length_text}${description_text}`
+	}
+	
+	explain() {
+		let explanation = this.get_metatype() + " " + this.toString()
+		
+		let long_desc = ""
+		if (this.long_description != "") long_desc += this.long_description + "\n"
+		if (this.from != "") long_desc += "From " + this.grammar.version_id + " § " + this.from
+		if (long_desc != "") explanation += "\n" + long_desc
+		
+		for (let pair of this.values) {
+			let key_text = typeof pair[0] == "string" ? pair[0] : pair[0].join("&")
+			let val_text = typeof pair[1] == "string" ? pair[1] : pair[1].join(", ")
+			explanation += `\n${key_text} : ${val_text}`
+		}
+		
+		console.log(explanation)
 	}
 }
