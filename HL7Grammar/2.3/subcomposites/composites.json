@@ -91,11 +91,13 @@
 			"description": "The date and time of the event.",
 			"long-description": "Takes the form `YYYY[MM[DD[HHMM[SS[.S[S[S[S]]]]]]]][+/-ZZZZ]`.",
 			"type": "ST",
+			"length": 24,
 			"optionality": "O"
 		}, {
 			"description": "Degree of precision. This component is retained only for backward compatibility.",
 			"long-description": "This component is a single letter, one of 'Y', 'L', 'D', 'H', 'M', or 'S' for year, month, day, hour, minute, and second respectively.",
 			"type": "ST",
+			"length": 1,
 			"optionality": "O"
 		}]
 	}

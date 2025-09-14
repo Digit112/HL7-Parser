@@ -104,36 +104,68 @@ class HL7Grammar {
 			table.cache_length()
 		}
 		
-		// Set length on all composite constituents, these will be their own values, the value of the backing table if any, or the value of the backing type.
-		// Set length on all composite metatypes - that is, all segment constituents. Each is the sum of the precalculated lengths plus allowances for delimiters.
-		// Set length on all segment metatypes - that is *NOT* all message constituents, since message constituents are sometimes segment *groups*
-		// Set the length of all non-primitives based on their constituents.
+		// Set length on all non-primitives constituents.
+		// Each will cache the length on all constituents as needed first.
+		// These lengths will be their own values, the value of the backing table if any, or the value of the backing type.
+		for (let subcomposite of Object.values(this.subcomposites)) {
+			subcomposite.cache_length()
+		}
+		for (let composite of Object.values(this.composites)) {
+			composite.cache_length()
+		}
+		for (let segment of Object.values(this.segments)) {
+			segment.cache_length()
+		}
+		for (let message of Object.values(this.messages)) {
+			message.cache_length()
+		}
 		
 		this.finalized = true
 	}
 	
 	// Returns the entity identified by the passed type_id if it exists, null otherwise.
 	get_entity(type_id) {
-		if (type_id in this.tables) {
-			return this.tables[type_id]
+		let type_parts = type_id.split(".")
+		
+		if (type_parts.length < 1) throw new Error(`Invalid type_id ${type_id}`)
+		
+		let entity_container = null
+		if (type_parts[0] in this.tables) {
+			entity_container = this.tables[type_parts[0]]
 		}
-		else if (type_id in this.primitives) {
-			return this.primitives[type_id]
+		else if (type_parts[0] in this.primitives) {
+			entity_container = this.primitives[type_parts[0]]
 		}
-		else if (type_id in this.subcomposites) {
-			return this.subcomposites[type_id]
+		else if (type_parts[0] in this.subcomposites) {
+			entity_container = this.subcomposites[type_parts[0]]
 		}
-		else if (type_id in this.composites) {
-			return this.composites[type_id]
+		else if (type_parts[0] in this.composites) {
+			entity_container = this.composites[type_parts[0]]
 		}
-		else if (type_id in this.segments) {
-			return this.segments[type_id]
+		else if (type_parts[0] in this.segments) {
+			entity_container = this.segments[type_parts[0]]
 		}
-		else if (type_id in this.messages) {
-			return this.messages[type_id]
+		else if (type_parts[0] in this.messages) {
+			entity_container = this.messages[type_parts[0]]
 		}
 		else {
 			return null
+		}
+		
+		if (type_parts.length == 1) {
+			return entity_container
+		}
+		else {
+			if (!(entity_container instanceof HL7NonPrimitive)) {
+				throw new Error(`Invalid type_id ${type_id} identifies index into non-indexable ${entity_container.get_metatype()}`)
+			}
+			
+			if (type_parts.length == 2) {
+				return entity_container.get_constituent(type_parts[1])
+			}
+			else {
+				return entity_container.get_constituent(type_parts[1], type_parts[2])
+			}
 		}
 	}
 	
@@ -159,9 +191,16 @@ class HL7Grammar {
 		return errors_div
 	}
 	
+	// Displays a lengthy formatted description of the specified type.
 	explain(type_id) {
 		let entity = this.get_entity(type_id)
-		entity.explain()
+		
+		if (entity == null) {
+			console.log("No such entity.")
+		}
+		else {
+			entity.explain()
+		}
 	}
 	
 	// Logs a list of all known entities on this grammar to the console.

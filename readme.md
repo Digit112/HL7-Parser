@@ -101,6 +101,10 @@ HL7 2.3 § 2.11 refers to segment groups as a part of their "special notation" f
 
 To resolve this issue, later versions like HL7 2.5 § 2.5.2 impose restrictions on the ordering of fields in these situations. In short, two instances of a segment which are not repetitions of one another and which do not belong to a common group or which are both individual
 
+### Constituent Indexing
+
+The HL7Grammar object understands entity names like "MSH", "ST", and "HD" for segments, and also like "EVN.1" for the first constituent in the "EVN" type. Segment groups can also be indexed using a novel syntax, all groups have the same index as their first non-group member plus a so-called depth letter. So the group whose first member is IN1.14 will be called IN1.14.A (if it is not itself within a segment group. If PID.4 is the first member of a group who is the first member in an outer group, then the outer group is PID.4.A and the inner group is PID.4.B, and so on.
+
 ## Tables
 
 Tables are like enum types and have definitions that look like this:
