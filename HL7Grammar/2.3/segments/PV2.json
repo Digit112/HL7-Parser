@@ -1,0 +1,325 @@
+{
+  "SEGMENT PV2": {
+    "description": "Patient Visit - Additional Information",
+    "long-description": "The PV2 segment is a continuation of visit-specific information contained on the PV1 segment.",
+    "from": "3.3.4",
+    "constituents": [
+      {
+        "description": "Prior Pending Location",
+  	  "long-description": "This field is required for cancel pending transfer (A27 (cancel pending admit)) messages. In all other events it is optional.",
+        "from": "3.3.4.1",
+        "type": "PL",
+        "length": 80,
+        "optionality": "C"
+      },
+      {
+        "description": "Accommodation Code",
+  	  "long-description": "This field indicates the specific patient accommodations for this visit.",
+        "from": "3.3.4.2",
+        "type": "CE",
+        "length": 60,
+        "optionality": "O",
+        "table": "0129"
+      },
+      {
+        "description": "Admit Reason",
+  	  "long-description": "This field contains the short description of the reason for patient admission.",
+        "from": "3.3.4.3",
+        "type": "CE",
+        "length": 60,
+        "optionality": "O"
+      },
+      {
+        "description": "Transfer Reason",
+  	  "long-description": "This field contains the short description of the reason for a patient location change.",
+        "from": "3.3.4.4",
+        "type": "CE",
+        "length": 60,
+        "optionality": "O"
+      },
+      {
+        "description": "Patient Valuables",
+  	  "long-description": "This field contains the short description of patient valuables checked in during admission.",
+        "from": "3.3.4.5",
+        "type": "ST",
+        "length": 25,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Patient Valuables Location",
+  	  "long-description": "This field indicates the location of the patient's valuables.",
+        "from": "3.3.4.6",
+        "type": "ST",
+        "length": 25,
+        "optionality": "O"
+      },
+      {
+        "description": "Visit User Code",
+  	  "long-description": "This field further categorizes a patient's visit with respect to an individual institution's needs (e.g., teaching flag = TE, indicating the patient is a teaching case).",
+        "from": "3.3.4.7",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0130"
+      },
+      {
+        "description": "Expected Admit Date/Time",
+  	  "long-description": "This field contains the date and time that the patient is expected to be admitted. This field is also used to reflect the date/time of an outpatient/emergency patient registration.",
+        "from": "3.3.4.8",
+        "type": "TS",
+        "length": 26,
+        "optionality": "O"
+      },
+      {
+        "description": "Expected Discharge Date/Time",
+  	  "long-description": "This field contains the date and time that the patient is expected to be discharged. This is a non-event related date used by ancillaries to determine more accurately the projected workloads. This field is also used to reflect the anticipated discharge date/time of an outpatient/emergency patient, or an inpatient.",
+        "from": "3.3.4.9",
+        "type": "TS",
+        "length": 26,
+        "optionality": "O"
+      },
+      {
+        "description": "Estimated Length of Inpatient Stay",
+  	  "long-description": "This field specifies the estimated days of inpatient stays.",
+        "from": "3.3.4.10",
+        "type": "NM",
+        "length": 3,
+        "optionality": "O"
+      },
+      {
+        "description": "Actual Length of Inpatient Stay",
+  	  "long-description": "This field contains the actual days of inpatient stays. The actual length of the inpatient stay may not be calculated from the admission and discharge dates because of possible leaves of absence.",
+        "from": "3.3.4.11",
+        "type": "NM",
+        "length": 3,
+        "optionality": "O"
+      },
+      {
+        "description": "Visit Description",
+  	  "long-description": "This field contains a brief user-defined description of the visit.",
+        "from": "3.3.4.12",
+        "type": "ST",
+        "length": 50,
+        "optionality": "O"
+      },
+      {
+        "description": "Referral Source Code",
+  	  "long-description": "This field contains the name and the identification numbers of the person or organization that made the referral. This person/organization is not the same as the referring doctor. For example, Joe Smith referred me to the Clinic (or to Dr. Jones at the Clinic).",
+        "from": "3.3.4.13",
+        "type": "XCN",
+        "length": 90,
+        "optionality": "O"
+      },
+      {
+        "description": "Previous Service Date",
+  	  "long-description": "This field contains the date of previous service for the same recurring condition. This may be a required field for billing certain illnesses (e.g., accident related) to a third party.",
+        "from": "3.3.4.14",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O"
+      },
+      {
+        "description": "Employment Illness Related Indicator",
+  	  "long-description": "This field specifies whether a patient's illness was job-related.",
+        "from": "3.3.4.15",
+        "type": "ID",
+        "length": 1,
+        "optionality": "O",
+        "table": "0136"
+      },
+      {
+        "description": "Purge Status Code",
+  	  "long-description": "This field contains the purge status code for the account. It is used by the application program to determine purge processing.",
+        "from": "3.3.4.16",
+        "type": "IS",
+        "length": 1,
+        "optionality": "O",
+        "table": "0213"
+      },
+      {
+        "description": "Purge Status Date",
+  	  "long-description": "This field contains the date on which the data will be purged from the system.",
+        "from": "3.3.4.17",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O"
+      },
+      {
+        "description": "Special Program Code",
+  	  "long-description": "This field designates the specific health insurance program for a visit required for healthcare reimbursement. Examples include Child Health Assistance, Elective Surgery Program, Family Planning, etc.",
+        "from": "3.3.4.18",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0214"
+      },
+      {
+        "description": "Retention Indicator",
+  	  "long-description": "This field allows the user to control the financial and demographic purge processes at the visit. It is used to preserve demographic and financial data on specific, high priority visits.",
+        "from": "3.3.4.19",
+        "type": "ID",
+        "length": 1,
+        "optionality": "O",
+        "table": "0136"
+      },
+      {
+        "description": "Expected Number of Insurance Plans",
+  	  "long-description": "This field contains the number of insurance plans that may provide coverage for this visit.",
+        "from": "3.3.4.20",
+        "type": "NM",
+        "length": 1,
+        "optionality": "O"
+      },
+      {
+        "description": "Visit Publicity Code",
+  	  "long-description": "This field contains a user-defined code indicating what level of publicity is allowed (e.g., No Publicity, Family Only) for a specific visit.",
+        "from": "3.3.4.21",
+        "type": "IS",
+        "length": 1,
+        "optionality": "O",
+        "table": "0215"
+      },
+      {
+        "description": "Visit Protection Indicator",
+  	  "long-description": "This field identifies the person's protection that determines, in turn, whether access to information about this person should be kept from users who do not have adequate authority for a specific visit. Refer to PD1-12-patient protection indicator for the patient level protection indicator.",
+        "from": "3.3.4.22",
+        "type": "ID",
+        "length": 1,
+        "optionality": "O",
+        "table": "0136"
+      },
+      {
+        "description": "Clinic Organization Name",
+  	  "long-description": "This field contains the organization name or sub-unit and identifier that is associated with the (visit) episode of care. For example, the Allergy or Oncology Clinic within the facility might be named.",
+        "from": "3.3.4.23",
+        "type": "XON",
+        "length": 90,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Patient Status Code",
+  	  "long-description": "This field indicates the status of the episode of care: for instance, Active Inpatient vs. Discharged Inpatient.",
+        "from": "3.3.4.24",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0216"
+      },
+      {
+        "description": "Visit Priority Code",
+  	  "long-description": "This field contains the priority of the visit, e.g., whether the admission is an emergency, elective, or urgent.",
+        "from": "3.3.4.25",
+        "type": "IS",
+        "length": 1,
+        "optionality": "O",
+        "table": "0217"
+      },
+      {
+        "description": "Previous Treatment Date",
+  	  "long-description": "This field contains the date that the patient last had treatment for any condition prior to this visit. In the case of a prior hospital visit, it is likely to be the previous discharge date.",
+        "from": "3.3.4.26",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O"
+      },
+      {
+        "description": "Expected Discharge Disposition",
+  	  "long-description": "This field describes what the patient's disposition is expected to be at the end of the visit.",
+        "from": "3.3.4.27",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0112"
+      },
+      {
+        "description": "Signature on File Date",
+  	  "long-description": "This field contains the date on which a signature was obtained for insurance billing purposes.",
+        "from": "3.3.4.28",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O"
+      },
+      {
+        "description": "First Similar Illness Date",
+  	  "long-description": "This field is used to determine if the patient has a pre-existing condition.",
+        "from": "3.3.4.29",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O"
+      },
+      {
+        "description": "Patient Charge Adjustment Code",
+  	  "long-description": "This field contains a user-defined code that indicates which adjustments should be made to this patient's charges. This field is the same as GT1-28-guarantor charge adjustment code.",
+        "from": "3.3.4.30",
+        "type": "IS",
+        "length": 3,
+        "optionality": "O",
+        "table": "0218"
+      },
+      {
+        "description": "Recurring Service Code",
+  	  "long-description": "This field indicates whether the treatment is continuous.",
+        "from": "3.3.4.31",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0219"
+      },
+      {
+        "description": "Billing Media Code",
+  	  "long-description": "This field indicates if the account is to be rejected from tape billing.",
+        "from": "3.3.4.32",
+        "type": "ID",
+        "length": 1,
+        "optionality": "O",
+        "table": "0136"
+      },
+      {
+        "description": "Expected Surgery Date & Time",
+  	  "long-description": "This field contains the date and time on which the surgery is expected to occur.",
+        "from": "3.3.4.33",
+        "type": "TS",
+        "length": 26,
+        "optionality": "O"
+      },
+      {
+        "description": "Military Partnership Code",
+  	  "long-description": "This field indicates that a military facility has contracted with a non-military facility for the use of its services.",
+        "from": "3.3.4.34",
+        "type": "ID",
+        "length": 2,
+        "optionality": "O",
+        "table": "0136"
+      },
+      {
+        "description": "Military Non-Availability Code",
+  	  "long-description": "This field indicates whether a patient has permission to use a non-military facility for treatment.",
+        "from": "3.3.4.35",
+        "type": "ID",
+        "length": 2,
+        "optionality": "O",
+        "table": "0136"
+      },
+      {
+        "description": "Newborn Baby Indicator",
+  	  "long-description": "This field indicates whether the patient is a baby.",
+        "from": "3.3.4.36",
+        "type": "ID",
+        "length": 1,
+        "optionality": "O",
+        "table": "0136"
+      },
+      {
+        "description": "Baby Detained Indicator",
+  	  "long-description": "This field indicates if the baby is detained after the mother's discharge.",
+        "from": "3.3.4.37",
+        "type": "ID",
+        "length": 1,
+        "optionality": "O",
+        "table": "0136"
+      }
+    ]
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "SEGMENT PD1": {
+    "description": "Patient Additional Demographic",
+    "long-description": "The patient additional demographic segment contains demographic information that is likely to change about the patient.",
+    "from": "3.3.9",
+    "constituents": [
+      {
+        "description": "Living Dependency",
+        "from": "3.3.9.1",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0223"
+      },
+      {
+        "description": "Living Arrangement",
+        "from": "3.3.9.2",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0220"
+      },
+      {
+        "description": "Patient Primary Facility",
+        "from": "3.3.9.3",
+        "type": "XON",
+        "length": 90,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Patient Primary Care Provider Name & ID No.",
+        "from": "3.3.9.4",
+        "type": "XCN",
+        "length": 90,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Student Indicator",
+        "from": "3.3.9.5",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0231"
+      },
+      {
+        "description": "Handicap",
+        "from": "3.3.9.6",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0295"
+      },
+      {
+        "description": "Living Will",
+        "from": "3.3.9.7",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0315"
+      },
+      {
+        "description": "Organ Donor",
+        "from": "3.3.9.8",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0316"
+      },
+      {
+        "description": "Separate Bill",
+        "from": "3.3.9.9",
+        "type": "ID",
+        "length": 2,
+        "optionality": "O",
+        "table": "0136"
+      },
+      {
+        "description": "Duplicate Patient",
+        "from": "3.3.9.10",
+        "type": "CX",
+        "length": 2,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Publicity Indicator",
+        "from": "3.3.9.11",
+        "type": "CE",
+        "length": 1,
+        "optionality": "O",
+        "table": "0125"
+      },
+      {
+        "description": "Protection Indicator",
+        "from": "3.3.9.12",
+        "type": "ID",
+        "length": 1,
+        "optionality": "O",
+        "table": "0136"
+      }
+    ]
+  }
+}

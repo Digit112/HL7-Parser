@@ -1,0 +1,467 @@
+{
+  "SEGMENT PV1": {
+    "description": "Patient Visit Segment",
+    "long-description": "The PV1 segment is used by Registration/Patient Administration applications to communicate information on a visit-specific basis. This segment can be used to send multiple-visit statistic records to the same patient account or single-visit records to more than one account. Individual sites must determine the use for this segment.",
+    "from": "3.3.3",
+    "constituents": [
+      {
+        "description": "Set ID - PV1",
+  	  "long-description": "This field contains the number that identifies this transaction. For the first occurrence of the segment, the sequence number shall be one, for the second occurrence, the sequence number shall be two, etc.",
+        "from": "3.3.3.1",
+        "type": "SI",
+        "length": 4,
+        "optionality": "O"
+      },
+      {
+        "description": "Patient Class",
+  	  "long-description": "This field is used by systems to categorize patients by site. It does not have a consistent industry-wide definition. It is subject to site-specific variations.",
+        "from": "3.3.3.2",
+        "type": "IS",
+        "length": 1,
+        "optionality": "R",
+        "table": "0004"
+      },
+      {
+        "description": "Assigned Patient Location",
+  	  "long-description": "This field contains the patient's initial assigned location or the location to which the patient is being moved. The first component may be the nursing station for inpatient locations, or clinic, department, or home for locations other than inpatient. For canceling a transaction or discharging a patient, the current location (after the cancellation event or before the discharge event) should be in this field. If a value exists in the fifth component (bed status), it supersedes the value in PV1-40-bed status.",
+        "from": "3.3.3.3",
+        "type": "PL",
+        "length": 80,
+        "optionality": "O"
+      },
+      {
+        "description": "Admission Type",
+  	  "long-description": "This field indicates the circumstances under which the patient was or will be admitted.",
+        "from": "3.3.3.4",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0007"
+      },
+      {
+        "description": "Preadmit Number",
+  	  "long-description": "This field uniquely identifies the patient's pre-admit account. Some systems will continue to use the pre-admit number as the billing number after the patient has been admitted. ***For backward compatibility, an ST data type can be sent***; however HL7 recommends use of the CX data type, like the account number, for new implementations.",
+        "from": "3.3.3.5",
+        "type": "CX",
+        "length": 20,
+        "optionality": "O"
+      },
+      {
+        "description": "Prior Patient Location",
+  	  "long-description": "This field contains the prior patient location if the patient is being transferred. The old location is null if the patient is new. If a value exists in the fifth component (bed status), it supersedes the value in PV1-40-bed status.",
+        "from": "3.3.3.6",
+        "type": "PL",
+        "length": 80,
+        "optionality": "O"
+      },
+      {
+        "description": "Attending Doctor",
+  	  "long-description": "This field contains the attending physician information. Multiple names and identifiers for the same physician may be sent. The field sequences are not used to indicate multiple attending doctors. The legal name must be sent in the first sequence. If the legal name is not sent, then a repeat delimiter must be sent in the first sequence. Depending on local agreements, either ID or the name may be absent in this field.",
+        "from": "3.3.3.7",
+        "type": "XCN",
+        "length": 60,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0010"
+      },
+      {
+        "description": "Referring Doctor",
+  	  "long-description": "This field contains the referring physician information. Multiple names and identifiers for the same physician may be sent. The field sequences are not used to indicate multiple referring doctors. The legal name must be sent in the first sequence. If the legal name is not sent, then a repeat delimiter must be sent in the first sequence. Depending on local agreements, either the ID or the name may be absent from this field.",
+        "from": "3.3.3.8",
+        "type": "XCN",
+        "length": 60,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0010"
+      },
+      {
+        "description": "Consulting Doctor",
+  	  "long-description": "This field contains the consulting physician information. The field sequences are used to indicate multiple consulting doctors. Depending on local agreements, either the ID or the name may be absent from this field.",
+        "from": "3.3.3.9",
+        "type": "XCN",
+        "length": 60,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0010"
+      },
+      {
+        "description": "Hospital Service",
+  	  "long-description": " This field contains the treatment or type of surgery that the patient is scheduled to receive. It is a required field with trigger events A01 (admit/visit notification), A02 (transfer a patient), A14 (pending admit), A15 (pending transfer).",
+        "from": "3.3.3.10",
+        "type": "IS",
+        "length": 3,
+        "optionality": "O",
+        "table": "0069"
+      },
+      {
+        "description": "Temporary Location",
+  	  "long-description": "This field contains a location other than the assigned location required for a temporary period of time (e.g., OR). If a value exists in the fifth component (bed status), it supersedes the value in PV1-40-bed status.",
+        "from": "3.3.3.11",
+        "type": "PL",
+        "length": 80,
+        "optionality": "O"
+      },
+      {
+        "description": "Preadmit Test Indicator",
+  	  "long-description": "This field indicates whether the patient must have pre-admission testing done in order to be admitted.",
+        "from": "3.3.3.12",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0087"
+      },
+      {
+        "description": "Readmission Indicator",
+  	  "long-description": "This field indicates that a patient is being re-admitted to the facility and gives the circumstances. We suggest using \"R\" for readmission or else null.",
+        "from": "3.3.3.13",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0092"
+      },
+      {
+        "description": "Admit Source",
+  	  "long-description": "This field indicates where the patient was admitted.",
+        "from": "3.3.3.14",
+        "type": "IS",
+        "length": 3,
+        "optionality": "O",
+        "table": "0023"
+      },
+      {
+        "description": "Ambulatory Status",
+  	  "long-description": "This field indicates any permanent or transient handicapped conditions.",
+        "from": "3.3.3.15",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0009"
+      },
+      {
+        "description": "VIP Indicator",
+  	  "long-description": "This field identifies the type of VIP.",
+        "from": "3.3.3.16",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0099"
+      },
+      {
+        "description": "Admitting Doctor",
+  	  "long-description": "This field contains the admitting physician information. Multiple names and identifiers for the same physician may be sent. The field sequences are not used to indicate multiple admitting doctors. The legal name must be sent in the first sequence. If the legal name is not sent, then a repeat delimiter must be sent in the first sequence. By local agreement, the name or ID may be absent in this field.",
+        "from": "3.3.3.17",
+        "type": "XCN",
+        "length": 60,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0010"
+      },
+      {
+        "description": "Patient Type",
+  	  "long-description": "This field contains site-specific values that identify the patient type.",
+        "from": "3.3.3.18",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0018"
+      },
+      {
+        "description": "Visit Number",
+  	  "long-description": "For backward compatibility, an NM data type may be sent, but HL7 recommends that new implementations use the CX data type. This field contains the unique number assigned to each patient visit.",
+        "from": "3.3.3.19",
+        "type": "CX",
+        "length": 20,
+        "optionality": "O"
+      },
+      {
+        "description": "Financial Class",
+  	  "long-description": "This field contains the primary financial class assigned to the patient for the purpose of identifying sources of reimbursement. Repeats up to four times.",
+        "from": "3.3.3.20",
+        "type": "FC",
+        "length": 50,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0064"
+      },
+      {
+        "description": "Charge Price Indicator",
+  	  "long-description": "This field contains the code used to determine which price schedule is to be used for room and bed charges.",
+        "from": "3.3.3.21",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0032"
+      },
+      {
+        "description": "Courtesy Code",
+  	  "long-description": "This field indicates whether the patient will be extended certain special courtesies.",
+        "from": "3.3.3.22",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0045"
+      },
+      {
+        "description": "Credit Rating",
+  	  "long-description": "This field contains the user-defined code to determine past credit experience.",
+        "from": "3.3.3.23",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0046"
+      },
+      {
+        "description": "Contract Code",
+  	  "long-description": "This field identifies the type of contract entered into by the facility and the guarantor for the purpose of settling outstanding account balances.",
+        "from": "3.3.3.24",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0044"
+      },
+      {
+        "description": "Contract Effective Date",
+  	  "long-description": "This field contains the date that the contract is to start or started.",
+        "from": "3.3.3.25",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Contract Amount",
+  	  "long-description": "This field contains the amount to be paid by the guarantor each period according to the contract.",
+        "from": "3.3.3.26",
+        "type": "NM",
+        "length": 12,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Contract Period",
+  	  "long-description": "This field specifies the duration of the contract for user-defined periods.",
+        "from": "3.3.3.27",
+        "type": "NM",
+        "length": 3,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Interest Code",
+  	  "long-description": "This field indicates the amount of interest that will be charged the guarantor on any outstanding amounts.",
+        "from": "3.3.3.28",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0073"
+      },
+      {
+        "description": "Transfer to Bad Debt Code",
+  	  "long-description": "This field indicates that the account was transferred to bad debts and gives the reason.",
+        "from": "3.3.3.29",
+        "type": "IS",
+        "length": 1,
+        "optionality": "O",
+        "table": "0110"
+      },
+      {
+        "description": "Transfer to Bad Debt Date",
+  	  "long-description": "This field contains the date that the account was transferred to a bad debt status.",
+        "from": "3.3.3.30",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O"
+      },
+      {
+        "description": "Bad Debt Agency Code",
+  	  "long-description": "This field can be used as an ST type for backward compatibility. This field uniquely identifies the bad debt agency to which the account was transferred. This code is site defined. One possible implementation would be to edit against a table such as user-defined table 0021 - Bad debt agency code; however, this is not required.",
+        "from": "3.3.3.31",
+        "type": "IS",
+        "length": 10,
+        "optionality": "O",
+        "table": "0021"
+      },
+      {
+        "description": "Bad Debt Transfer Amount",
+  	  "long-description": "This field contains the amount that was transferred to a bad debt status.",
+        "from": "3.3.3.32",
+        "type": "NM",
+        "length": 12,
+        "optionality": "O"
+      },
+      {
+        "description": "Bad Debt Recovery Amount",
+  	  "long-description": "This field contains the amount recovered from the guarantor on the account.",
+        "from": "3.3.3.33",
+        "type": "NM",
+        "length": 12,
+        "optionality": "O"
+      },
+      {
+        "description": "Delete Account Indicator",
+  	  "long-description": "This field indicates that the account was deleted from the file and gives the reason.",
+        "from": "3.3.3.34",
+        "type": "IS",
+        "length": 1,
+        "optionality": "O",
+        "table": "0111"
+      },
+      {
+        "description": "Delete Account Date",
+  	  "long-description": "This field contains the date that the account was deleted from the file.",
+        "from": "3.3.3.35",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O"
+      },
+      {
+        "description": "Discharge Disposition",
+  	  "long-description": "This field contains the disposition of the patient at time of discharge (i.e., discharged to home, expired, etc.).",
+        "from": "3.3.3.36",
+        "type": "IS",
+        "length": 3,
+        "optionality": "O",
+        "table": "0112"
+      },
+      {
+        "description": "Discharged to Location",
+  	  "long-description": "This field indicates a facility to which the patient was discharged.",
+        "from": "3.3.3.37",
+        "type": "CM",
+        "length": 25,
+        "optionality": "O",
+        "table": "0113"
+      },
+      {
+        "description": "Diet Type",
+  	  "long-description": "This field indicates a special diet type for a patient.",
+        "from": "3.3.3.38",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0114"
+      },
+      {
+        "description": "Servicing Facility",
+  	  "long-description": "This field is used in a multiple facility environment to indicate the facility with which this visit is associated. An optional fourth component, the facility ID, may be valued in each individual location field in PV1, instead of placing it here.",
+        "from": "3.3.3.39",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0115"
+      },
+      {
+        "description": "Bed Status",
+  	  "long-description": "This field has been retained for backward compatibility only. This field contains the status of the bed. An optional fifth component, bed status, may be valued in each individual location field in PV1, instead of placing it here.",
+        "from": "3.3.3.40",
+        "type": "IS",
+        "length": 1,
+        "optionality": "B",
+        "table": "0116"
+      },
+      {
+        "description": "Account Status",
+  	  "long-description": "This field contains the account status.",
+        "from": "3.3.3.41",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0117"
+      },
+      {
+        "description": "Pending Location",
+  	  "long-description": "This field indicates the point of care, room, bed, facility ID, and bed status to which the patient may be moved. The first component may be the nursing station for inpatient locations, or the clinic, department, or home for locations other than inpatient. If a value exists in the fifth component (bed status), it supersedes the value in PV1-40-bed status.",
+        "from": "3.3.3.42",
+        "type": "PL",
+        "length": 80,
+        "optionality": "O"
+      },
+      {
+        "description": "Prior Temporary Location",
+  	  "long-description": "This field is used to reflect the patient's temporary location (such as the OR or X-RAY) prior to a transfer from a temporary location to an actual location, or from a temporary location to another temporary location. The first component may be the nursing station for inpatient locations, or the clinic, department, or home for locations other than inpatient. If a value exists in the fifth component (bed status), it supersedes the value in PV1-40-bed status.",
+        "from": "3.3.3.43",
+        "type": "PL",
+        "length": 80,
+        "optionality": "O"
+      },
+      {
+        "description": "Admit Date/Time",
+  	  "long-description": "This field contains the admit date/time. It is to be used if the event date/time is different than the admit date and time, i.e., a retroactive update. This field is also used to reflect the date/time of an outpatient/emergency patient registration.",
+        "from": "3.3.3.44",
+        "type": "TS",
+        "length": 26,
+        "optionality": "O"
+      },
+      {
+        "description": "Discharge Date/Time",
+  	  "long-description": "This field contains the discharge date/time. It is to be used if the event date/time is different than the discharge date and time, that is, a retroactive update. This field is also used to reflect the date/time of an outpatient/emergency patient discharge.",
+        "from": "3.3.3.45",
+        "type": "TS",
+        "length": 26,
+        "optionality": "O"
+      },
+      {
+        "description": "Current Patient Balance",
+  	  "long-description": "This field contains the visit balance due.",
+        "from": "3.3.3.46",
+        "type": "NM",
+        "length": 12,
+        "optionality": "O"
+      },
+      {
+        "description": "Total Charges",
+  	  "long-description": "This field contains the total visit charges.",
+        "from": "3.3.3.47",
+        "type": "NM",
+        "length": 12,
+        "optionality": "O"
+      },
+      {
+        "description": "Total Adjustments",
+  	  "long-description": "This field contains the total adjustments for visit.",
+        "from": "3.3.3.48",
+        "type": "NM",
+        "length": 12,
+        "optionality": "O"
+      },
+      {
+        "description": "Total Payments",
+  	  "long-description": "This field contains the total payments for visit.",
+        "from": "3.3.3.49",
+        "type": "NM",
+        "length": 12,
+        "optionality": "O"
+      },
+      {
+        "description": "Alternate Visit ID",
+  	  "long-description": "This field contains the alternative, temporary, or pending optional visit ID number to be used if needed.",
+        "from": "3.3.3.50",
+        "type": "CX",
+        "length": 20,
+        "optionality": "O",
+        "table": "0192"
+      },
+      {
+        "description": "Visit Indicator",
+  	  "long-description": "This field specifies the level on which data are being sent. It is the indicator used to send data at two levels, visit and account.",
+        "from": "3.3.3.51",
+        "type": "IS",
+        "length": 1,
+        "optionality": "O",
+        "table": "0326"
+      },
+      {
+        "description": "Other Healthcare Provider",
+  	  "long-description": "This field contains the other healthcare providers (e.g., Nurse care practitioner, midwife, physician assistant). Multiple healthcare providers can be sent. Depending on local agreements, either the ID or the name may be absent from this field.",
+        "from": "3.3.3.52",
+        "type": "XCN",
+        "length": 60,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0010"
+      }
+    ]
+  }
+ }

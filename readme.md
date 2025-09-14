@@ -6,13 +6,13 @@ These definitions all look like key-value pairs with a key having a metatype par
 
 An HL7 message is split into segments which are themselves subdivided into components, these components may be a composite, subcomposite, or primitive. A composite may be made of subcomposites and primitives, while a subcomposite may only consist of primitives.
 
-| Depth | Field Name   | Metatypes that can occupy this field | Can be constituents of  |
-| :---: | :----------- | :----------------------------------- | :---------------------- |
-| 0     | Message      | MESSAGE                              |                         |
-| 1     | Segment      | SEGMENT                              | MESSAGE                 |
-| 2     | Field        | COMPOSITE, SUBCOMPOSITE, PRIMITIVE   | SEGMENT                 |
-| 3     | Component    | SUBCOMPOSITE, PRIMITIVE              | COMPOSITE               |
-| 4     | Subcomponent | PRIMITIVE                            | SUBCOMPOSITE, PRIMITIVE |
+| Depth | Field Name   | Metatypes that can occupy this field | Can be constituents of           |
+| :---: | :----------- | :----------------------------------- | :------------------------------- |
+| 0     | Message      | MESSAGE                              |                                  |
+| 1     | Segment      | SEGMENT                              | MESSAGE                          |
+| 2     | Field        | COMPOSITE, SUBCOMPOSITE, PRIMITIVE   | SEGMENT                          |
+| 3     | Component    | SUBCOMPOSITE, PRIMITIVE              | SEGMENT, COMPOSITE               |
+| 4     | Subcomponent | PRIMITIVE                            | SEGMENT, COMPOSITE, SUBCOMPOSITE |
 
 Think of a metatype (which isn't a real HL7 concept by the way) as categorizations that all HL7 types - including segments and messages themselves - fall into. They govern the way in which the type hierarchy can be arranged.
 
@@ -24,40 +24,40 @@ The definitions for Messages, Segments, Composites, Subcomposites, and Primitive
 
 ```
 "PRIMITIVE <type-id>": {
-	"description": "<description>",
-	"long-description": "<long description>",
-	"from": "<section>",
-	"length": <integer>
+    "description": "<description>",
+    "long-description": "<long description>",
+    "from": "<section>",
+    "length": <integer>
 }
 ```
 
 ```
 "<MESSAGE | SEGMENT | COMPOSITE | SUBCOMPOSITE> <type-id>": {
-	"description": "<description>",
-	"long-description": "<long description>",
-	"from": "<section>",
-	"constituents": [
-		{
-			"description": "<description>",
-			"long-description": "<long description>",
-			"from": "<section>",
-			"type": "<type-id>",
-			"length": <integer>,
-			"optionality": "<O | C | R | B | W>",
-			"repeatability": <integer>,
-			"table": "<table-id>",
-			"constituents": [ ... ]
-		},
-		...
-	}]
+    "description": "<description>",
+    "long-description": "<long description>",
+    "from": "<section>",
+    "constituents": [
+        {
+            "description": "<description>",
+            "long-description": "<long description>",
+            "from": "<section>",
+            "type": "<type-id>",
+            "length": <integer>,
+            "optionality": "<O | C | R | B | W>",
+            "repeatability": <integer>,
+            "table": "<table-id>",
+            "constituents": [ ... ]
+        },
+        ...
+    }]
 }
 ```
 
-As you can see, the definitions for MESSAGE, SEGMENT, COMPOSITE, and SUBCOMPOSITE are so similar that they've been grouped into a single syntax. These four are called the "non-primitives", a category which (despite its name) excludes tables. This mirrors the internal structure of the implementation, *but* the definitions are not identical, all fields are not valid for all non-primitive metatypes.
+As you can see, the definitions for MESSAGE, SEGMENT, COMPOSITE, and SUBCOMPOSITE are so similar that they've been grouped into a single syntax. These four are called the "non-primitives". This mirrors the internal structure of the implementation, *but* the definitions are not identical, all fields are not valid for all non-primitive metatypes.
 
 In all cases, the `type-id` key is the unique identifier for this message, segment, or data type as defined by HL7. Examples include "ORU R01", "MSH", and "ST".
 
-The `description`, `long-description`, and `from` fields are all basically the same - will be displayed to the user, typically come straight from the HL7 documentation (perhaps elided), and default to an empty string. `description` should be only a few words, whereas `long-description` may be anywhere from a short sentence to a paragraph and is used to explain semantics and edge cases. `from` is a dot-delimited specifier for a section of the HL7 specification, for example `"2.A.33.1"` which describes the Namespace ID field of the Hierarchic designator composite.
+The `description`, `long-description`, and `from` fields are all basically the same - they will be displayed to the user, typically come straight from the HL7 documentation (perhaps elided), and default to an empty string. `description` should be only a few words, whereas `long-description` may be anywhere from a short sentence to a paragraph and is used to explain semantics and edge cases. `from` is a dot-delimited specifier for a section of the HL7 specification, for example `"2.A.33.1"` which describes the Namespace ID field of the Hierarchic designator composite.
 
 The constituent `type` field must match the `type-id` key on some other definition. That type's metatype must be valid as per the metatype checking rules summarized in the table above.
 
@@ -82,18 +82,18 @@ An early example is this constituent of MESSAGE ADT A01, an optional-repeatable 
 
 ```
 {
-	"optionality": "O",
-	"repeatability": -1,
-	"constituents": [{
-		"description": "Procedure",
-		"type": "PR1",
-		"optionality": "R"
-	}, {
-		"description": "Role",
-		"type": "ROL",
-		"optionality": "O",
-		"repeatability": -1
-	}]
+    "optionality": "O",
+    "repeatability": -1,
+    "constituents": [{
+        "description": "Procedure",
+        "type": "PR1",
+        "optionality": "R"
+    }, {
+        "description": "Role",
+        "type": "ROL",
+        "optionality": "O",
+        "repeatability": -1
+    }]
 }
 ```
 
@@ -111,16 +111,16 @@ Tables are like enum types and have definitions that look like this:
 
 ```
 "TABLE <table-id>": {
-	"description": "<description>",
-	"long-description": "<long description>",
-	"from": "<section>",
-	"length": <integer>,
-	"values": {
-		"<value 1>": "<description 1>",
-		"<value 2>": "<description 2>",
-		...,
-		"<value n>": "<description n>"
-	}
+    "description": "<description>",
+    "long-description": "<long description>",
+    "from": "<section>",
+    "length": <integer>,
+    "values": {
+        "<value 1>": "<description 1>",
+        "<value 2>": "<description 2>",
+        ...,
+        "<value n>": "<description n>"
+    }
 }
 ```
 
@@ -136,9 +136,9 @@ Values are typically specified as above as key-value pairs. Alternatively, the d
 
 ```
 "values": [
-	"value 1": "desc 1",
-	"value 2": ["desc 2"],
-	"value 3": ["desc 3 part 1", "desc 3 part 2"]
+    "value 1": "desc 1",
+    "value 2": ["desc 2"],
+    "value 3": ["desc 3 part 1", "desc 3 part 2"]
 }
 ```
 
@@ -148,11 +148,11 @@ The keys can also be arrays. In this case, they define a composite type from a t
 
 ```
 "values": [
-	["value 1", "desc 1"],
-	["value 2", ["desc 2 part 1", "desc 2 part 2"]],
-	[["value 3 part 1", "value 3 part 2"], "desc 3"],
-	[["value 4 part 1", "value 4 part 2"], ["desc 4 part 1", "desc 4 part 2"]],
-	[["23", "myhealthapplication.com", "DNS"], "My Health Application"]
+    ["value 1", "desc 1"],
+    ["value 2", ["desc 2 part 1", "desc 2 part 2"]],
+    [["value 3 part 1", "value 3 part 2"], "desc 3"],
+    [["value 4 part 1", "value 4 part 2"], ["desc 4 part 1", "desc 4 part 2"]],
+    [["23", "myhealthapplication.com", "DNS"], "My Health Application"]
 ]
 ```
 
@@ -193,32 +193,32 @@ Reordering segments in any given message is very unlikely to cause an issue that
 Consider this portion of the `MESSAGE ADT A01` definition from HL7 2.5 § 3.3.1. Recall that `[]` denote optional segments and `{}` denote repeatable segments.
 
 ```
-[{            --- PROCEDURE begin	
+[{            --- PROCEDURE begin    
     PR1
     [{ROL}]
 }]            --- PROCEDURE end
 [ { GT1 } ]
-[{            --- INSURANCE begin	
+[{            --- INSURANCE begin    
     IN1
     [IN2]
     [{IN3}]
     [{ROL}]
-}]            --- INSURANCE begin	
+}]            --- INSURANCE begin    
 ```
 
 Presume we move the second ROL up to the top of the INSURANCE section and don't include the optional GT1 field. Then our message would effectively look like this:
 
 ```
-[{            --- PROCEDURE begin	
+[{            --- PROCEDURE begin    
     PR1
     [{ROL}]
 }]            --- PROCEDURE end
-[{            --- INSURANCE begin	
+[{            --- INSURANCE begin    
     [{ROL}]
     IN1
     [IN2]
     [{IN3}]
-}]            --- INSURANCE begin	
+}]            --- INSURANCE begin    
 ```
 
 And a message following this syntax might have segments like this:

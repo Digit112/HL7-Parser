@@ -14,6 +14,11 @@
 		"long-description": "Numeric data written in decimal, the allowable charcters are the ASCII digits, the leading plus and minus sign, and a single decimal point.",
 		"from": "2.8.25"
 	},
+	"PRIMITIVE SI": {
+		"description": "Sequence ID",
+		"long-description": "A non-negative integer in the form of an NM field. The uses of this data type are defined in the chapters defining the segments and messages in which it appears. ",
+		"from": "2.8.36"
+	},
 	"PRIMITIVE ST": {
 		"description": "Textual information",
 		"long-description": "Up to 199 printable ASCII characters in the ASCII range 0x20 (32) to 0x7E (126) except the defined delimiter characters.",

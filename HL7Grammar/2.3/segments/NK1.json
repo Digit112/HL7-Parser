@@ -1,0 +1,301 @@
+{
+  "SEGMENT NK1": {
+    "description": "Next of Kin / Associated Parties",
+    "long-description": "The NK1 segment contains information about the patient's other related parties. Any associated parties may be identified. Utilizing NK1-1-set ID, multiple NK1 segments can be sent to patient accounts.",
+    "from": "3.3.5",
+    "constituents": [
+      {
+        "description": "Set ID - NK1",
+  	  "description": "This field contains the number that identifies this transaction. For the first occurrence of the segment, the sequence number shall be one, for the second occurrence, the sequence number shall be two, etc.",
+        "from": "3.3.5.1",
+        "type": "SI",
+        "length": 4,
+        "optionality": "R"
+      },
+      {
+        "description": "Name",
+        "from": "3.3.5.2",
+        "type": "XPN",
+        "length": 48,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Relationship",
+        "from": "3.3.5.3",
+        "type": "CE",
+        "length": 60,
+        "optionality": "O",
+        "table": "0063"
+      },
+      {
+        "description": "Address",
+        "from": "3.3.5.4",
+        "type": "XAD",
+        "length": 106,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Phone Number",
+        "from": "3.3.5.5",
+        "type": "XTN",
+        "length": 40,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Business Phone Number",
+        "from": "3.3.5.6",
+        "type": "XTN",
+        "length": 40,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Contact Role",
+        "from": "3.3.5.7",
+        "type": "CE",
+        "length": 60,
+        "optionality": "O",
+        "table": "0131"
+      },
+      {
+        "description": "Start Date",
+        "from": "3.3.5.8",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O"
+      },
+      {
+        "description": "End Date",
+        "from": "3.3.5.9",
+        "type": "DT",
+        "length": 8,
+        "optionality": "O"
+      },
+      {
+        "description": "Next of Kin / Associated Parties Job Title",
+        "from": "3.3.5.10",
+        "type": "ST",
+        "length": 60,
+        "optionality": "O"
+      },
+      {
+        "description": "Next of Kin / Associated Parties Job Code/Class",
+        "from": "3.3.5.11",
+        "type": "JCC",
+        "length": 20,
+        "optionality": "O"
+      },
+      {
+        "description": "Next of Kin / Associated Parties Employee Number",
+        "from": "3.3.5.12",
+        "type": "CX",
+        "length": 20,
+        "optionality": "O"
+      },
+      {
+        "description": "Organization Name",
+        "from": "3.3.5.13",
+        "type": "XON",
+        "length": 60,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Marital Status",
+        "from": "3.3.5.14",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0002"
+      },
+      {
+        "description": "Sex",
+        "from": "3.3.5.15",
+        "type": "IS",
+        "length": 1,
+        "optionality": "O",
+        "table": "0001"
+      },
+      {
+        "description": "Date/Time of Birth",
+        "from": "3.3.5.16",
+        "type": "TS",
+        "length": 26,
+        "optionality": "O"
+      },
+      {
+        "description": "Living Dependency",
+        "from": "3.3.5.17",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0223"
+      },
+      {
+        "description": "Ambulatory Status",
+        "from": "3.3.5.18",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0009"
+      },
+      {
+        "description": "Citizenship",
+        "from": "3.3.5.19",
+        "type": "IS",
+        "length": 4,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0171"
+      },
+      {
+        "description": "Primary Language",
+        "from": "3.3.5.20",
+        "type": "CE",
+        "length": 60,
+        "optionality": "O",
+        "table": "0296"
+      },
+      {
+        "description": "Living Arrangement",
+        "from": "3.3.5.21",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0220"
+      },
+      {
+        "description": "Publicity Indicator",
+        "from": "3.3.5.22",
+        "type": "CE",
+        "length": 1,
+        "optionality": "O",
+        "table": "0215"
+      },
+      {
+        "description": "Protection Indicator",
+        "from": "3.3.5.23",
+        "type": "ID",
+        "length": 1,
+        "optionality": "O",
+        "table": "0136"
+      },
+      {
+        "description": "Student Indicator",
+        "from": "3.3.5.24",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0231"
+      },
+      {
+        "description": "Religion",
+        "from": "3.3.5.25",
+        "type": "IS",
+        "length": 3,
+        "optionality": "O",
+        "table": "0006"
+      },
+      {
+        "description": "Mother's Maiden Name",
+        "from": "3.3.5.26",
+        "type": "XPN",
+        "length": 48,
+        "optionality": "O"
+      },
+      {
+        "description": "Nationality",
+        "from": "3.3.5.27",
+        "type": "CE",
+        "length": 80,
+        "optionality": "O",
+        "table": "0212"
+      },
+      {
+        "description": "Ethnic Group",
+        "from": "3.3.5.28",
+        "type": "IS",
+        "length": 3,
+        "optionality": "O",
+        "table": "0189"
+      },
+      {
+        "description": "Contact Reason",
+        "from": "3.3.5.29",
+        "type": "CE",
+        "length": 80,
+        "optionality": "O",
+        "repeatability": -1,
+        "table": "0222"
+      },
+      {
+        "description": "Contact Person's Name",
+        "from": "3.3.5.30",
+        "type": "XPN",
+        "length": 48,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Contact Person's Telephone Number",
+        "from": "3.3.5.31",
+        "type": "XTN",
+        "length": 40,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Contact Person's Address",
+        "from": "3.3.5.32",
+        "type": "XAD",
+        "length": 106,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Next of Kin/Associated Party's Identifiers",
+        "from": "3.3.5.33",
+        "type": "CX",
+        "length": 32,
+        "optionality": "O",
+        "repeatability": -1
+      },
+      {
+        "description": "Job Status",
+        "from": "3.3.5.34",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0311"
+      },
+      {
+        "description": "Race",
+        "from": "3.3.5.35",
+        "type": "IS",
+        "length": 1,
+        "optionality": "O",
+        "table": "0005"
+      },
+      {
+        "description": "Handicap",
+        "from": "3.3.5.36",
+        "type": "IS",
+        "length": 2,
+        "optionality": "O",
+        "table": "0295"
+      },
+      {
+        "description": "Contact Person Social Security Number",
+        "from": "3.3.5.37",
+        "type": "ST",
+        "length": 16,
+        "optionality": "O"
+      }
+    ]
+  }
+}

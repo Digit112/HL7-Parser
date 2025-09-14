@@ -1,0 +1,237 @@
+{
+	"SEGMENT PID": {
+		"description": "Patient Identification",
+		"long-description": "The PID segment is used by all applications as the primary means of communicating patient identification information. This segment contains permanent patient identifying and demographic information that, for the most part, is not likely to change frequently.",
+		"from": "3.3.2",
+		"constituents": [{
+			"description": "Set ID - Patient ID",
+			"long-description": "This field contains the number that identifies this transaction. For the first occurrence of the segment, the sequence number shall be one, for the second occurrence, the sequence number shall be two, etc.",
+			"from": "3.3.2.1",
+			"type": "SI",
+			"length": 4,
+			"optionality": "O"
+		}, {
+			"description": "Patient ID (External ID)",
+			"long-description": "When the patient is from another institution, outside office, etc., the identifier used by that institution can be shown in this field. This may be a number that multiple disparate corporations or facilities share.",
+			"from": "3.3.2.2",
+			"type": "CX",
+			"length": 20,
+			"optionality": "O"
+		}, {
+			"description": "Patient ID (Internal ID)",
+			"long-description": "This field contains the primary identifier, or other identifiers used by the facility to identify a patient uniquely (e.g., medical record number, billing number, birth registry, etc.). When merging patient IDs (A34 (merge patient information-patient ID only) and A36 (merge patient information-patient ID & account number) events), the Patient ID contained in the PID segment cannot repeat.",
+			"from": "3.3.2.3",
+			"type": "CX",
+			"length": 20,
+			"optionality": "R",
+			"repeatability": -1
+		}, {
+			"description": "Alternate Patient ID - PID",
+			"long-description": "This field contains the alternate, temporary, or pending optional patient identifier to be used if needed - or additional numbers that may be required to identify a patient. This field may be used to convey multiple patient IDs when more than one exist for a patient. Possible contents might include a visit number, a visit date, or a Social Security Number.",
+			"from": "3.3.2.4",
+			"type": "CX",
+			"length": 20,
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Patient Name",
+			"long-description": "This field contains the legal name of the patient. All other names for the patient should be sent in PID-9-patient alias. Therefore, the name type code in this field should be \"L - Legal.\" Repetition of this field is allowed for representing the same name in different character sets. Please refer to the PN data type.",
+			"from": "3.3.2.5",
+			"type": "XPN",
+			"length": 48,
+			"optionality": "R",
+			"repeatability": -1
+		}, {
+			"description": "Mother's Maiden Name",
+			"long-description": "This field contains the family name under which the mother was born (i.e., before marriage). It is used to distinguish between patients with the same last name. =",
+			"from": "3.3.2.6",
+			"type": "XPN",
+			"length": 48,
+			"optionality": "O"
+		}, {
+			"description": "Date/Time of Birth",
+			"long-description": "This field contains the patient's date and time of birth.",
+			"from": "3.3.2.7",
+			"type": "TS",
+			"length": 26,
+			"optionality": "O"
+		}, {
+			"description": "Sex",
+			"long-description": "This field contains the patient's sex.",
+			"from": "3.3.2.8",
+			"type": "IS",
+			"length": 1,
+			"optionality": "O",
+			"table": "0001"
+		}, {
+			"description": "Patient Alias",
+			"long-description": "This field contains the name(s) by which the patient has been known at some time.",
+			"from": "3.3.2.9",
+			"type": "XPN",
+			"length": 48,
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Race",
+			"long-description": "This field refers to the patient's race.",
+			"from": "3.3.2.10",
+			"type": "IS",
+			"length": 1,
+			"optionality": "O"
+		}, {
+			"description": "Patient Address",
+			"long-description": "This field contains the mailing address of the patient. Address type codes are user defined. Multiple addresses for the same person may be sent in the following sequence: The primary mailing address must be sent first in the sequence (for backward compatibility); if the mailing address is not sent, then a repeat delimiter must be sent in the first sequence.",
+			"from": "3.2.2.11",
+			"type": "XAD",
+			"length": 106,
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "County Code",
+			"long-description": " This field has been retained for backward compatibility. This field contains the patient's county code. The county can now be supported in the county/parish code component of the XAD data type (PID.11 - Patient Address).",
+			"from": "3.3.2.12",
+			"type": "IS",
+			"length": 4,
+			"optionality": "B"
+		}, {
+			"description": "Phone Number - Home",
+			"long-description": "This field contains the patient's personal phone numbers. All personal phone numbers for the patient are sent in the following sequence. The first sequence is considered the primary number (for backward compatibility). If the primary number is not sent, then a repeat delimiter is sent in the first sequence.",
+			"from": "3.3.2.13",
+			"type": "XTN",
+			"length": 40,
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Phone Number - Business",
+			"long-description": "This field contains the patient's business telephone numbers. All business numbers for the patient are sent in the following sequence. The first sequence is considered the patient's primary business phone number (for backward compatibility). If the primary business phone number is not sent, then a repeat delimiter must be sent in the first sequence.",
+			"from": "3.3.2.14",
+			"type": "XTN",
+			"length": 40,
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Primary Language",
+			"long-description": "This field contains the patient's primary language. HL7 recommends using ISO table 639 as the suggested values.",
+			"from": "3.3.2.15",
+			"type": "CE",
+			"length": 60,
+			"optionality": "O",
+			"table": "0296"
+		}, {
+			"description": "Marital Status",
+			"long-description": " This field contains the patient's marital status.",
+			"from": "3.3.2.16",
+			"type": "IS",
+			"length": 1,
+			"optionality": "O",
+			"table": "0002"
+		}, {
+			"description": "Religion",
+			"long-description": "This field contains the patient's religion.",
+			"from": "3.3.2.17",
+			"type": "IS",
+			"length": 3,
+			"optionality": "O",
+			"table": "0006"
+		}, {
+			"description": "Patient Account Number",
+			"long-description": "This field contains the patient account number assigned by accounting to which all charges, payments, etc., are recorded. It is used to identify the patient's account.",
+			"from": "3.3.2.18",
+			"type": "CX",
+			"length": 20,
+			"optionality": "O"
+		}, {
+			"description": "SSN Number - Patient",
+			"long-description": "This field contains the patient's social security number. This number may also be an RR retirement number.",
+			"from": "3.3.2.19",
+			"type": "ST",
+			"length": 16,
+			"optionality": "O"
+		}, {
+			"description": "Driver's License Number - Patient",
+			"long-description": "This field contains the patient's driver's license number. Some sites may use this number as a unique identifier of the patient. The default of the second component is the state in which the patient's license is registered.",
+			"from": "3.3.2.20",
+			"type": "DLN",
+			"length": 25,
+			"optionality": "O"
+		}, {
+			"description": "Mother's Identifier",
+			"long-description": "This field is used, for example, as a link field for newborns. Typically a patient ID or account number may be used. This field can contain multiple identifiers for the same mother.",
+			"from": "3.3.2.21",
+			"type": "CX",
+			"length": 20,
+			"optionality": "O",
+			"repeatability": -1
+		}, {
+			"description": "Ethnic Group",
+			"long-description": "This field further defines the patient's ancestry. ERISA has a published list of ethnic classifications that may be used by local agreement at a site.",
+			"from": "3.3.2.22",
+			"type": "IS",
+			"length": 3,
+			"optionality": "O",
+			"table": "0189"
+		}, {
+			"description": "Birth Place",
+			"long-description": "This field indicates the location of the patient's birth.",
+			"from": "3.3.2.23",
+			"type": "ST",
+			"length": 60,
+			"optionality": "O"
+		}, {
+			"description": "Multiple Birth Indicator",
+			"long-description": "This field indicates whether the patient was part of a multiple birth.",
+			"from": "3.3.2.24",
+			"type": "ID",
+			"length": 2,
+			"optionality": "O",
+			"table": "0136"
+		}, {
+			"description": "Birth Order",
+			"long-description": "When a patient was part of a multiple birth, a value (number) indicating the patient's birth order is entered in this field.",
+			"from": "3.2.2.25",
+			"type": "NM",
+			"length": 2,
+			"optionality": "O"
+		}, {
+			"description": "Citizenship",
+			"long-description": "This field contains the patient's country of citizenship. HL7 recommends using ISO table 3166 as the suggested values.",
+			"from": "3.3.2.26",
+			"type": "IS",
+			"length": 4,
+			"optionality": "O",
+			"repeatability": -1,
+			"table": "0171"
+		}, {
+			"description": "Veterans Military Status",
+			"long-description": "This field contains the military status assigned to a veteran.",
+			"from": "3.3.2.27",
+			"type": "CE",
+			"length": 60,
+			"optionality": "O",
+			"table": "0172"
+		}, {
+			"description": "Nationality",
+			"long-description": "This field contains a code that identifies the nation or national grouping to which the insured person belongs. This information may be different from a person's citizenship in countries in which multiple nationalities are recognized (for example, Spain: Basque, Catalan, etc.). HL7 recommends using ISO table 3166 as he suggested values.",
+			"from": "3.3.2.28",
+			"type": "CE",
+			"length": 80,
+			"optionality": "O",
+			"table": "0212"
+		}, {
+			"description": "Patient Death Date and Time",
+			"long-description": "This field contains the date and time at which the patient death occurred.",
+			"from": "3.3.2.29",
+			"type": "TS",
+			"length": 26,
+			"optionality": "O"
+		}, {
+			"description": "Patient Death Indicator",
+			"long-description": "This field indicates whether or not the patient is deceased.",
+			"from": "3.3.2.30",
+			"type": "ID",
+			"length": 1,
+			"optionality": "O",
+			"table": "0136"
+		}]
+	}
+}
