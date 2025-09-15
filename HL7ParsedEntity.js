@@ -34,7 +34,7 @@ class HL7ParsedEntity {
 		if (reason == null)
 			// This ensures that all malformed entities have at least one, relevant error.
 			throw new Error("Parsing failure must have an accompanying reason.")
-		if (!(reason instanceof HL7ParsingError)) {
+		if (!(reason instanceof HL7ParsingError))
 			throw new Error("Parsing failure's reason must be an HL7ParsingError.")
 		
 		// Reason for total parsing failure is always first,
@@ -51,6 +51,7 @@ class HL7ParsedEntity {
 class HL7ParsedSegment extends HL7ParsedEntity {
 	constructor(grammar, body, delimiters) {
 		if (body.length < 4) {
+			super(grammar, body, null, delimiters)
 			this.failure(new HL7ParsingError("Segment too short."))
 			return
 		}
@@ -58,6 +59,7 @@ class HL7ParsedSegment extends HL7ParsedEntity {
 		let type_id = body.slice(0, 4)
 		let entity = grammar.get_entity(type_id)
 		if (entity == null) {
+			super(grammar, body, null, delimiters)
 			this.failure(new HL7ParsingError(`Unknown segment '${type_id}'.`))
 			return
 		}
@@ -99,7 +101,7 @@ class HL7ParsedSegment extends HL7ParsedEntity {
 					this.failure(new HL7ParsingError(`Constituent ${entity.type_id}.${constituent.index} is malformed.`, new_field))
 				}
 				else {
-					this.errors.push(new HL7ParsingError(`Error(s) encountered while parsing constituent ${entity.type_id}.${constituent.index}.`, new_field)
+					this.errors.push(new HL7ParsingError(`Error(s) encountered while parsing constituent ${entity.type_id}.${constituent.index}.`, new_field))
 				}
 			}
 			
@@ -117,7 +119,7 @@ class HL7ParsedConstituent extends HL7ParsedEntity {
 	constructor(grammar, body, entity, delimiters, level) {
 		super(grammar, body, entity, delimiters)
 		
-		if (!(entity instanceof HL7Constituent) {
+		if (!(entity instanceof HL7Constituent)) {
 			console.log(entity)
 			throw new Error("Must not initialize an HL7ParsedConstituent except with an HL7Constituent")
 			return
@@ -126,7 +128,7 @@ class HL7ParsedConstituent extends HL7ParsedEntity {
 		let type = grammar.get_entity(entity.type)
 		
 		if (type == null) {
-			this.errors.append(new HL7ParsingError(`Constituent is of unknown type '${entity.type}'.`)
+			this.errors.append(new HL7ParsingError(`Constituent is of unknown type '${entity.type}'.`))
 			return
 		}
 		
@@ -154,8 +156,9 @@ class HL7ParsedConstituent extends HL7ParsedEntity {
 			return
 		}
 		
-		if (type.get_metatype() == "SUBCOMPOSITE") {
-			this.repetitions = this.body.split(
+		if (type.get_metatype() == "SUBCOMPOSITE" || type.get_metatype() == "COMPOSITE") {
+			this.repetitions = this.body.split(delimiters[level])
+			console.log(this.repetitions)
 		}
 	}
 }
@@ -240,7 +243,6 @@ class HL7ParsedMessage extends HL7ParsedEntity {
 		
 		// Attempt to fit the segments to the constituents of this message.
 		
-		for (let constituent of this.
 	}
 	
 	// Returns true if the result of parsing was that the entity could not be made sense of at all.
