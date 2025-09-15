@@ -1,3 +1,5 @@
 :root {
 	font-family: Calibri, sans-serif
 }
+
+new HL7ParsedSegment(HL7_versions["2.3"], "MSH|^~\&|EPIC|EPIC^ADT|iFW|SMS^ADT|199912271408|CHARRIS|ADT^A04|1817457|D|2.5|", {"components": ["|", "^", "&"], "repeat": "~", "escape": "\\"})

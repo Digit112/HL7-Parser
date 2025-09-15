@@ -1,4 +1,4 @@
-// Represents the children of a non-primitive entity, that is, a composite, segment, or message.
+// Represents the children of a non-primitive entity, that is, a subcomposite, composite, segment, or message.
 // The index is as per the HL7 specification, being 1-based, and used in dot notation as in "MSH.11
 // The parent fields and file_of_origin field are used in error reporting.
 class HL7Constituent extends HL7Entity {

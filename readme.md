@@ -236,3 +236,26 @@ IN1| ...
 ```
 
 Now, clearly, there are 5 ROL segments, but which belong to the "PROCEDURE" group and which to the "INSURANCE" group? It is impossible to tell. As long as our sending application never omits required segments and always sends segments in the correct order, this issue cannot occur... in HL7 2.5 or greater...
+
+# HL7 Notes
+
+## Null and Empty Values
+
+In HL7, a blank field is distinct from he null field, which is transmitted as `""`. In my parser, the blank field is "null" whereas the null field is represented as an empty string. While this might seem a bit confusing, the values reflect HL7's internal understanding of the transmitted values. An empty field means *no data sent*, if an empty field is sent in a patch message of some kind, existing data in that field is retained. If the so-called "null value" is transmitted, however, it's more like *blank data sent*. If found in a patch message, corresponding database fields shoulld be wiped. In my implementation then, a value which is null means *no data* whereas an empty string means *blank data*, which is the normal interpretation of these values in JavaScript even though the words for them appear swapped from the HL7 specifications.
+
+| HL7 field value              | HL7 Name for this | JavaScript Value | interpretation |
+| ---------------------------- | ----------------- | ---------------- | -------------- |
+| Pair of double quotes (`""`) | Null Value        | `""`             | Blank Data     |
+| Nothing (` `)                | Empty Value       | `null`           | No data        |
+
+Note that if the trailing fields are all *empty*, their delimiters may be omitted. For example,
+
+```
+||abc|def|||
+```
+
+is the same as 
+
+```
+||abc|def
+```
