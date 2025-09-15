@@ -6,12 +6,12 @@
 	},
 	"PRIMITIVE IS": {
 		"description": "Coded values for user-defined tables",
-		"long-description": "Must consist of printale ASCII characters (like ST) and contain a value present in the associated table, which must be user-defined.",
+		"long-description": "Must consist of printable ASCII characters (like ST) and contain a value present in the associated table, which must be user-defined.",
 		"from": "2.8.20"
 	},
 	"PRIMITIVE NM": {
 		"description": "Numeric",
-		"long-description": "Numeric data written in decimal, the allowable charcters are the ASCII digits, the leading plus and minus sign, and a single decimal point.",
+		"long-description": "Numeric data written in decimal, the allowable characters are the ASCII digits, the leading plus and minus sign, and a single decimal point.",
 		"from": "2.8.25"
 	},
 	"PRIMITIVE SI": {

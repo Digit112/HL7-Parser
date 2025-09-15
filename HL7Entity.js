@@ -1,14 +1,3 @@
-class HL7Delimiters {
-	constructor(seg_sep, comp_sep, subcomp_sep, rep_sep, esc) {
-		this.seg_sep = seg_sep
-		this.comp_sep = comp_sep
-		this.subcomp_sep = subcomp_sep
-		
-		this.rep_sep = rep_sep
-		this.esc = esc
-	}
-}
-
 // Every definition in the grammar files corresponds to an HL7Entity.
 // The types are Message, Segment, Composite, Primitive, and Table.
 class HL7Entity {

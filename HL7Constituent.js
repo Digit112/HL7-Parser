@@ -3,12 +3,13 @@
 // The parent fields and file_of_origin field are used in error reporting.
 class HL7Constituent extends HL7Entity {
 	constructor(first_constituent_id, depth, body, parent_metatype, parent_type_id, file_of_origin, grammar) {
-		super("CONSTITUENT", file_of_origin, grammar)
-		
 		this.index = first_constituent_id
 		this.depth_letter = String.fromCharCode(65 + Math.min(depth, 25)) // Note after depth letter Z it just uses Z forever.
 		this.parent_metatype = parent_metatype
 		this.parent_type_id = parent_type_id
+		
+		let my_type_id = "constituents" in body ? `${parent_type_id}.${this.index}.${depth_letter}` : `${parent_type_id}.${this.index}`
+		super(my_type_id, file_of_origin, grammar)
 		
 		// If this is an individual constituent, this is equal to the value of first_consituent_id that was passed to the constructor.
 		// Otherwise, if this is a segment group, it's that same number plus the total number of segments descending from this segment group, minus 1.
