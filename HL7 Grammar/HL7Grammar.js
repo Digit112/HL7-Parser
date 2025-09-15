@@ -1,6 +1,6 @@
 class HL7GrammarError extends Error{
 	constructor(error_message, file_of_origin) {
-		super(`In file ${file_of_origin}; ${error_message}`)
+		super(`In '${file_of_origin}' - ${error_message}`)
 	}
 }
 
@@ -172,23 +172,6 @@ class HL7Grammar {
 	// Report a new error interpreting the grammar file.
 	new_error(hl7_grammar_error) {
 		this.grammar_syntax_errors.push(hl7_grammar_error)
-	}
-	
-	// Generates and returns a div with a paragraph for every error currently reported on this object.
-	get_errors_as_HTML() {
-		let error_paragraphs = []
-		
-		for (let error of this.grammar_syntax_errors) {
-			let next_error = document.createElement("p")
-			next_error.textContent = error.toString()
-			error_paragraphs.push(next_error)
-		}
-		
-		let errors_div = document.createElement("div")
-		errors_div.id = `HL7-Version-${this.version_id}-errors`
-		errors_div.replaceChildren(...error_paragraphs)
-		
-		return errors_div
 	}
 	
 	// Displays a lengthy formatted description of the specified type.

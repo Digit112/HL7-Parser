@@ -53,13 +53,9 @@ class HL7NonPrimitive extends HL7Entity {
 	}
 	
 	cache_length() {
-		console.log("Caching length of " + this.type_id)
 		let acc_max_length = 0
 		for (let constituent of this.constituents) {
-			console.log("Caching length of " + this.type_id + "." + constituent.index)
-			console.log(constituent)
 			constituent.cache_length()
-			console.log(constituent.max_length)
 			acc_max_length += constituent.max_length * constituent.repeatability
 		}
 		

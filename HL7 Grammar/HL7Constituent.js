@@ -204,20 +204,11 @@ class HL7Constituent extends HL7Entity {
 			// Okay, now we can actually set the length:
 			if (this.max_length == null) {
 				if (table_entity != null) {
-					console.log("Length gets " + table_entity.max_length + " from table")
 					this.max_length = table_entity.max_length
-					console.log(this)
-					console.log(this.max_length)
 				}
 				else {
-					console.log("Length gets " + type_entity.max_length + " from type")
 					this.max_length = type_entity.max_length
-					console.log(this)
 				}
-			}
-			else {
-				console.log("Length stays " + this.max_length + " from explicit")
-				console.log(this)
 			}
 		}
 		// A segment group's length is, of course, the sum of the lengths of its constituents, plus the number of delimiters.

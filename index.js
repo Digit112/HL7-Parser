@@ -46,9 +46,7 @@ async function construct_grammars(zip) {
 	return HL7_versions
 }
 
-async function load_grammar_definitions() {
-	let HL7GR_file = hl7grammar.files[0]
-	
+async function load_grammar_definitions(HL7GR_file) {
 	if (HL7GR_file != null) {
 		const HL7GR_reader = new FileReader()
 		
@@ -56,10 +54,26 @@ async function load_grammar_definitions() {
 			const hl7_grammar = e.target.result;
 			const zip_file = await JSZip.loadAsync(hl7_grammar)
 			let HL7_versions = await construct_grammars(zip_file)
-	
-			document.getElementById("grammar-syntax-errors-div").replaceChildren(
-				...await (await Object.values(HL7_versions).map(val => val.get_errors_as_HTML()))
+			
+			// Show version select.
+			let hl7_version_span = document.getElementById("hl7-version-span")
+			let hl7_version_select = document.getElementById("hl7-version-select")
+			for (let version in HL7_versions) {
+				let version_option = document.createElement("option")
+				version_option.textContent = version
+				
+				hl7_version_select.appendChild(version_option)
+			}
+			
+			// Show errros
+			let all_versions_errors_div = document.getElementById("grammar-syntax-errors-div")
+			
+			all_versions_errors_div.replaceChildren(
+				...Object.values(HL7_versions).map(val => new HL7GrammarRenderer(val).render_errors())
 			)
+			
+			hl7_version_span.style.display = "inline"
+			all_versions_errors_div.style.display = "block"
 		}
 
 		// Read the file as an ArrayBuffer, which JSZip can process
@@ -68,5 +82,11 @@ async function load_grammar_definitions() {
 }
 
 let HL7_versions = {}
-const hl7grammar = document.getElementById("hl7grammar")
-hl7grammar.addEventListener("change", load_grammar_definitions)
+const hl7_grammar_file = document.getElementById("hl7-grammar-file-select")
+hl7_grammar_file.addEventListener("change", () => {
+	load_grammar_definitions(hl7_grammar_file.files[0])
+	hl7_grammar_file.value = null
+})
+
+const hl7_grammar_button = document.getElementById("hl7-grammar-file-select-button")
+hl7_grammar_button.addEventListener("click", () => hl7_grammar_file.click())

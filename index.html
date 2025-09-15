@@ -5,9 +5,20 @@
 		<link rel="stylesheet" href="index.css">
 	</head>
 	<body>
-		<input type="file" id="hl7grammar" accept=".HL7GR,.zip"></input>
+		<h1>Eko's HL7 Parser</h1>
+		<p>Load a grammar defintion file (.hl7gr, .zip) and select your preferred version. Paste your message in the box below to see the results.</p>
+		<input style="display: none;" type="file" id="hl7-grammar-file-select" accept=".HL7GR,.zip"></input>
+		<button id="hl7-grammar-file-select-button">Load HL7 Grammar Definition</button>
+		<span id="hl7-version-span" style="display: none;">
+			<label for="hl7-version-select">HL7 Version:</label>
+			<select id="hl7-version-select"></select>
+		</span>
+		<textarea id="message-textarea" rows="12", cols="128" placeholder="HL7 Message..."></textarea>
 		
-		<div id="grammar-syntax-errors-div"></div>
+		<hr>
+		
+		<div style="display: none;" id="grammar-syntax-errors-div">
+		</div>
 		
 		<script src="HL7 Grammar/HL7Entity.js"></script>
 		<script src="HL7 Grammar/HL7Table.js"></script>
@@ -20,6 +31,8 @@
 		<script src="HL7 Parser/HL7ParsedConstituent.js"></script>
 		<script src="HL7 Parser/HL7ParsedSegment.js"></script>
 		<script src="HL7 Parser/HL7ParsedMessage.js"></script>
+		
+		<script src="HTML Rendering/HL7GrammarRenderer.js"></script>
 		
 		<script src="JSZip.js"></script>
 		<script src="index.js"></script>
