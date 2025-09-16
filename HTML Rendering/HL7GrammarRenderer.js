@@ -3,7 +3,8 @@ class HL7GrammarRenderer {
 		this.grammar = grammar
 	}
 	
-	// Generates and returns a div with a paragraph for every error currently reported on this object.
+	// Generates and returns a div with a paragraph for every error currently reported on the HL7 grammar itself.
+	// These eerrors were created while loading the grammar file, and have nothing to do with any parsed messages.
 	// That div has a header with an option to collapse or expand the errors, collapsed by default.
 	render_errors() {
 		let container_div = document.createElement("div")

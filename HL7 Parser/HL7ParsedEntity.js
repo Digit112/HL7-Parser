@@ -35,8 +35,6 @@ class HL7ParsedEntity {
 			throw new Error("Grammar must not be null")
 		if (body == null)
 			throw new Error("Body must not be null")
-		if (entity == null)
-			throw new Error("Entity must not be null")
 		
 		this.grammar = grammar
 		this.body = body

@@ -135,7 +135,7 @@ class HL7ParsedConstituent extends HL7ParsedEntity {
 				}
 				let component_name = `${type.type_id}.${constituent.index} - '${constituent.description}' (${constituent.optionality})`
 				
-				console.log(`Parsing '${component_body}' as ${component_name}`)
+				//console.log(`Parsing '${component_body}' as ${component_name}`)
 				let parsed_component = new HL7ParsedConstituent(this.grammar, component_body, constituent, delimiters, level+1)
 				
 				if (parsed_component.has_errors()) {

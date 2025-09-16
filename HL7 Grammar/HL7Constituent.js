@@ -7,6 +7,9 @@ class HL7Constituent extends HL7Entity {
 		let my_type_id = "constituents" in body ? `${parent_type_id}.${first_constituent_id}.${depth_letter}` : `${parent_type_id}.${first_constituent_id}`
 		super(my_type_id, file_of_origin, grammar)
 		
+		// if (new.target === HL7Constituent)
+			// throw new Error("HL7Constituent cannot be instantiated directly.")
+		
 		this.index = first_constituent_id
 		this.depth_letter = depth_letter
 		this.parent_metatype = parent_metatype

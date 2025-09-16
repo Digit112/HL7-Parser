@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="UTF-8">
 		<title>Eko's HL7 Parser</title>
 		<link rel="stylesheet" href="index.css">
 	</head>
@@ -14,6 +15,17 @@
 			<select id="hl7-version-select"></select>
 		</span>
 		<textarea id="message-textarea" rows="12", cols="128" placeholder="HL7 Message..."></textarea>
+		
+		<button id="parse-button">Parse</button>
+		
+		<div id="reconstructed-message-div" class="code-block">
+		</div>
+		
+		<div id="constituent-description-div">
+		</div>
+		
+		<div id="entity-description-div">
+		</div>
 		
 		<hr>
 		
@@ -33,6 +45,9 @@
 		<script src="HL7 Parser/HL7ParsedMessage.js"></script>
 		
 		<script src="HTML Rendering/HL7GrammarRenderer.js"></script>
+		<script src="HTML Rendering/HL7MessageRenderer.js"></script>
+		<script src="HTML Rendering/HL7SegmentRenderer.js"></script>
+		<script src="HTML Rendering/HL7ConstituentRenderer.js"></script>
 		
 		<script src="JSZip.js"></script>
 		<script src="index.js"></script>

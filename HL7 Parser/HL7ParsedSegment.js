@@ -5,7 +5,7 @@
 class HL7ParsedSegment extends HL7ParsedEntity {
 	constructor(grammar, body, delimiters) {
 		if (body.length < 4) {
-			super(grammar, body, null, delimiters)
+			super(grammar, body)
 			this.failure(new HL7ParsingError("Segment too short."))
 			return
 		}
@@ -13,7 +13,7 @@ class HL7ParsedSegment extends HL7ParsedEntity {
 		let type_id = body.slice(0, 3)
 		let entity = grammar.get_entity(type_id)
 		if (entity == null) {
-			super(grammar, body, null, delimiters)
+			super(grammar, body)
 			this.failure(new HL7ParsingError(`Unknown segment '${type_id}'.`))
 			return
 		}
@@ -26,8 +26,6 @@ class HL7ParsedSegment extends HL7ParsedEntity {
 		if (type_id == "MSH")
 			field_bodies.unshift(delimiters["components"][0])
 		
-		console.log(field_bodies)
-		
 		this.fields = []
 		for (let constituent_i = 0; constituent_i < entity.constituents.length; constituent_i++) {
 			let constituent = entity.constituents[constituent_i]
@@ -39,7 +37,7 @@ class HL7ParsedSegment extends HL7ParsedEntity {
 				field_body = field_bodies[constituent_i]
 			}
 			
-			console.log(`Parsing '${field_body}' as ${entity.type_id}.${constituent.index} - '${constituent.description}'`)
+			//console.log(`Parsing '${field_body}' as ${entity.type_id}.${constituent.index} - '${constituent.description}'`)
 			let new_field = new HL7ParsedConstituent(grammar, field_body, constituent, delimiters, 1)
 			
 			if (new_field.has_errors()) {

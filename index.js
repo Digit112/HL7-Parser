@@ -90,3 +90,23 @@ hl7_grammar_file.addEventListener("change", () => {
 
 const hl7_grammar_button = document.getElementById("hl7-grammar-file-select-button")
 hl7_grammar_button.addEventListener("click", () => hl7_grammar_file.click())
+
+const parse_button = document.getElementById("parse-button")
+parse_button.addEventListener("click", () => {
+	let hl7_version_select = document.getElementById("hl7-version-select")
+	let message_textarea = document.getElementById("message-textarea")
+	
+	// Parse the message.
+	let grammar = HL7_versions[hl7_version_select.value]
+	let parsed_message = new HL7ParsedMessage(grammar, message_textarea.value)
+	
+	let constituent_description_div = document.getElementById("constituent-description-div")
+	let entity_description_div = document.getElementById("entity-description-div")
+	
+	let message_renderer = new HL7MessageRenderer(parsed_message, constituent_description_div, entity_description_div)
+	
+	let html = message_renderer.render()
+	
+	let reconstructed_message_div = document.getElementById("reconstructed-message-div")
+	reconstructed_message_div.replaceChildren(html)
+})
