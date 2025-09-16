@@ -14,7 +14,7 @@ class HL7GrammarRenderer {
 		// No errors, simple text explaining.
 		if (this.grammar.grammar_syntax_errors.length == 0) {
 			let header_text = documnet.createElement("span")
-			header_text.setAttribute("class", "grammar-syntax-no-errors")
+			header_text.setAttribute("class", "no-errors")
 			header_text.textContent = `HL7 ${this.grammar.version_id} compiled without error.`
 			
 			header_div.replaceChildren(header_text)
@@ -42,7 +42,7 @@ class HL7GrammarRenderer {
 			})
 			
 			let header_text = document.createElement("span")
-			header_text.setAttribute("class", "grammar-syntax-errors")
+			header_text.setAttribute("class", "errors")
 			header_text.textContent = `HL7 ${this.grammar.version_id} compiled with ${this.grammar.grammar_syntax_errors.length} errors.`
 			
 			let error_paragraphs = []

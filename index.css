@@ -63,11 +63,11 @@ textarea {
 	align-items: center;
 }
 
-.grammar-syntax-no-errors {
+.no-errors {
 	color: var(--no-errors);
 }
 
-.grammar-syntax-errors {
+.errors {
 	color: var(--errors);
 }
 
