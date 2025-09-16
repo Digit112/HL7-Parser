@@ -22,6 +22,9 @@ class HL7Grammar {
 		this.composites = {}
 		this.segments = {}
 		this.messages = {}
+		
+		// Link to the relevant HL7 specification
+		this.from = ""
 	}
 	
 	// This function consumes an object read from a JSON file.
@@ -31,10 +34,16 @@ class HL7Grammar {
 		if (this.finalized || this.consumption_completed) throw new Error("Cannot consume additional HL7 grammar definitions after finalization.")
 			
 		for (let key in definition) {
-			
 			try {
-				let delim = key.indexOf(" ")
+				// Special key "HL7" provides grammar-wide value(s)
+				if (key == "HL7") {
+					if ("from" in definition[key]) {
+						this.from = definition[key]["from"]
+					}
+					continue
+				}
 				
+				let delim = key.indexOf(" ")
 				if (delim == -1)
 					throw new HL7GrammarError(`Unable to extract type-id from entity definition \`${key}\`. It should take the form \`<metatype> <type-id>\`, with the space delimiter included.`, file_of_origin)
 				

@@ -9,7 +9,13 @@ class HL7SegmentRenderer {
 		this.parsed_segment = parsed_segment
 		this.constituent_description_div = constituent_description_div
 		this.entity_description_div = entity_description_div
+		
+		// Construct renderers for child elements.
 		this.field_renderers = []
+		for (let parsed_field of this.parsed_segment.fields) {
+			let new_field_renderer = new HL7ConstituentRenderer(parsed_field, this.constituent_description_div, this.entity_description_div)
+			this.field_renderers.push(new_field_renderer)
+		}
 	}
 	
 	// Renders the segment into a span and returns it.
@@ -26,20 +32,81 @@ class HL7SegmentRenderer {
 		let parsed_fields = this.parsed_segment.fields
 		if (this.parsed_segment.entity.type_id == "MSH") parsed_fields.shift()
 		
-		for (let parsed_field of this.parsed_segment.fields) {
-			let new_field_renderer = new HL7ConstituentRenderer(parsed_field, this.constituent_description_div, this.entity_description_div)
-			this.field_renderers.push(new_field_renderer) // Dunno if this'll actually be useful later.
-			
-			let next_span = new_field_renderer.render(1)
-			rendered_segment.append(this.parsed_segment.delimiters["components"][0], next_span)
+		for (let field_renderer of this.field_renderers) {
+			let field_delimiter = this.parsed_segment.delimiters["components"][0]
+			let next_span = field_renderer.render(1)
+			rendered_segment.append(field_delimiter, next_span)
 		}
 		
 		return rendered_segment
 	}
 	
 	render_description() {
-		console.log("Rendering Description :)")
+		console.log(this.parsed_segment)
 		
-		this.constituent_description_div
+		let description_suffix = this.parsed_segment.entity.description != "" ? ` - ${this.parsed_segment.entity.description}` : ""
+		let one_line_descripption = `SEGMENT ${this.parsed_segment.entity.type_id}${description_suffix}`
+		
+		// Generate from w/ link if possible
+		let from_span = null
+		if (this.parsed_segment.entity.from != "") {
+			from_span = document.createElement("span")
+			if (this.parsed_segment.grammar.from != "") {
+				let hl7_link = document.createElement("a")
+				hl7_link.setAttribute("href", this.parsed_segment.grammar.from)
+				hl7_link.textContent = `HL7 ${this.parsed_segment.grammar.version_id}`
+				
+				from_span.append("From ", hl7_link, ` § ${this.parsed_segment.entity.from}`)
+			}
+			else {
+				from_span.append(`From HL7 ${this.parsed_segment.grammar.version_id} § ${this.parsed_segment.entity.from}`)
+			}
+		}
+		
+		// Generate Errors Collapsible
+		let errors_div = document.createElement("div")
+		let errors_header_div = document.createElement("div")
+		errors_header_div.style.display = "flex"
+		
+		let errors_expand_button = document.createElement("button")
+		errors_expand_button.setAttribute("class", "expand-button")
+			
+		let errors_expand_button = document.createElement("button")
+		errors_expand_button.setAttribute("class", "expand-button")
+		errors_expand_button.textContent = "+"
+		errors_expand_button.addEventListener("click", () => {
+			if (errors_div.style.display == "none") {
+				errors_div.style.display = "block"
+				errors_expand_button.textContent = "-"
+			}
+			else {
+				errors_div.style.display = "none"
+				errors_expand_button.textContent = "+"
+			}
+		})
+		
+		let errors_body_div = document.createElement("div")
+		errors_body_div.style.display = "none"
+		
+		errors_div.append(errors_header_div, errors_body_div)
+		
+		let header = document.createElement("div")
+		header.setAttribute("id", "parsed-entity-description-header")
+		header.textContent = one_line_descripption
+		
+		let body = document.createElement("div")
+		body.setAttribute("id", "parsed-entity-description-body")
+		
+		if (this.parsed_segment.entity.long_description != "") {
+			body.append(this.parsed_segment.entity.long_description)
+			if (from_span != null) body.append(document.createElement("br"))
+		}
+		if (from_span != null) {
+			body.append(from_span)
+		}
+		
+		body.append(errors_div)
+		
+		this.constituent_description_div.replaceChildren(header, body)
 	}
 }
