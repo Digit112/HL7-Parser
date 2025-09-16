@@ -67,9 +67,6 @@ class HL7SegmentRenderer {
 		let errors_div = document.createElement("div")
 		let errors_header_div = document.createElement("div")
 		errors_header_div.style.display = "flex"
-		
-		let errors_expand_button = document.createElement("button")
-		errors_expand_button.setAttribute("class", "expand-button")
 			
 		let errors_expand_button = document.createElement("button")
 		errors_expand_button.setAttribute("class", "expand-button")
@@ -81,7 +78,7 @@ class HL7SegmentRenderer {
 			}
 			else {
 				errors_div.style.display = "none"
-				errors_expand_button.textContent = "+"
+				expand_button.textContent = "+"
 			}
 		})
 		
