@@ -14,9 +14,8 @@ class HL7GrammarRenderer {
 		else
 			group_error_text = `HL7 ${this.grammar.version_id} compiled with ${this.grammar.grammar_syntax_errors.length} error(s).`
 		
-		let group_error = {"message": group_error_text, "citations": [{"errors": this.grammar.grammar_syntax_errors}]}
-		
-		let errors_div = render_errors([group_error])
+		let root_error = {"message": group_error_text, "citations": [{"errors": this.grammar.grammar_syntax_errors}]}
+		let errors_div = render_errors([root_error])
 		return errors_div
 	}
 }

@@ -66,6 +66,14 @@ textarea {
 	}
 }
 
+.errors-root-div {
+	padding: 0.5em 0;
+	
+	.errors-text {
+		margin: 0.2em 0;
+	}
+}
+
 .errors-header {
 	display: flex;
 	gap: 0.25em;

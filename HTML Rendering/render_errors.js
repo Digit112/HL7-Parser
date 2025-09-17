@@ -9,9 +9,12 @@ function _toggle_show_hide(elem, expand_button) {
 	}
 }
 
-function render_errors(errors) {
+function render_errors(errors, is_root=true) {
 	let errors_div = document.createElement("div")
-	errors_div.setAttribute("class", "errors-div")
+	if (is_root)
+		errors_div.setAttribute("class", "errors-root-div")
+	else
+		errors_div.setAttribute("class", "errors-div")
 	
 	// Generate errors.
 	for (let error of errors) {
@@ -37,7 +40,7 @@ function render_errors(errors) {
 			error_header_p.textContent = error.message
 			
 			let all_cited_errors = [].concat(...(error.citations.map(citation => citation.errors)))
-			let errors_body_div = render_errors(all_cited_errors)
+			let errors_body_div = render_errors(all_cited_errors, false)
 			errors_body_div.style.display = "none"
 			
 			error_header_div.append(expand_button, error_header_p)

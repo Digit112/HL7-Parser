@@ -93,23 +93,32 @@ class HL7ParsedConstituent extends HL7ParsedEntity {
 		
 		/* At this point, we know that we are parsing a single non-repeating instance. */
 		
+		let my_name = `${this.entity.parent_type_id}.${this.entity.index} (${type.get_metatype()} ${this.entity.type})`
+		
+		// Perform input validation.
+		// Check for empty field and error if the field is required.
+		if (this.body == "" && this.entity.optionality == "R") {
+			this.failure(new HL7ParsingError(`Mandatory constituent ${my_name} is missing.`))
+		}
+		else {
+			// TODO: Check lengths
+		}
+		
 		this.repetitions = []
 		if (type.get_metatype() == "PRIMITIVE") {
+			let my_name = `${this.entity.parent_type_id}.${this.entity.index} (${type.get_metatype()} ${this.entity.type})`
+			
 			// "" is what HL7 calls the "null value, it signifies a blank value as opposed to "no data"
 			// Required fields can be blank. TODO: Am I sure of this?
 			if (this.body == '""') {
 				this.repetitions.push("")
 			}
+			
 			// Check for empty field and error if the field is required.
 			else if (this.body == "") {
-				if (this.entity.optionality == "R") {
-					this.failure(new HL7ParsingError(`Required field ${this.entity.parent_type_id}.${this.entity.index} is missing.`))
-				}
-				
 				this.repetitions.push(null)
 			}
 			else {
-				// TODO: Check lengths
 				this.repetitions.push(this.body)
 			}
 		}

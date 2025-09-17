@@ -41,7 +41,7 @@ class HL7ParsedSegment extends HL7ParsedEntity {
 			let new_field = new HL7ParsedConstituent(grammar, field_body, constituent, delimiters, 1)
 			
 			if (new_field.has_errors()) {
-				if (new_field.malformed) {
+				if (new_field.malformed && constituent.optionality == "R") {
 					this.failure(new HL7ParsingError(`Constituent ${entity.type_id}.${constituent.index} is malformed.`, [new_field]))
 				}
 				else {

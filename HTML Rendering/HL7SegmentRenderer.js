@@ -5,15 +5,26 @@
 	entity_description_div is where selected entities will have their descriptions placed.
 */
 class HL7SegmentRenderer {
-	constructor(parsed_segment, constituent_description_div, entity_description_div) {
+	constructor(parsed_segment, message_renderer, constituent_description_div, entity_description_div) {
+		if (!(parsed_segment instanceof HL7ParsedSegment)) {
+			console.log(parsed_segment)
+			throw new Error("parsed_segment must be HL7ParsedSegment.")
+		}
+		
+		if (!(message_renderer instanceof HL7MessageRenderer)) {
+			console.log(message_renderer)
+			throw new Error("message_renderer must be HL7MessageRenderer.")
+		}
+		
 		this.parsed_segment = parsed_segment
+		this.message_renderer = message_renderer
 		this.constituent_description_div = constituent_description_div
 		this.entity_description_div = entity_description_div
 		
 		// Construct renderers for child elements.
 		this.field_renderers = []
 		for (let parsed_field of this.parsed_segment.fields) {
-			let new_field_renderer = new HL7ConstituentRenderer(parsed_field, this.constituent_description_div, this.entity_description_div)
+			let new_field_renderer = new HL7ConstituentRenderer(parsed_field, this, this.constituent_description_div, this.entity_description_div)
 			this.field_renderers.push(new_field_renderer)
 		}
 	}
@@ -64,7 +75,7 @@ class HL7SegmentRenderer {
 		}
 		
 		// Generate Errors Collapsible
-		let errors_div = render_errors(this.parsed_segment.errors)
+		let errors_div = this.render_errors()
 		
 		// Create header and body of explanation
 		let header = document.createElement("div")
@@ -86,5 +97,17 @@ class HL7SegmentRenderer {
 		body.append(errors_div)
 		
 		this.constituent_description_div.replaceChildren(header, body)
+	}
+	
+	// Wraps this entity's errors in a single error with a nice header and returns it.
+	render_errors() {
+		let root_error_text = ""
+		if (this.parsed_segment.errors.length == 0)
+			root_error_text = "Segment parsed without error."
+		else
+			root_error_text = `Segment parsed with ${this.parsed_segment.errors.length} error(s).`
+		
+		let root_error = new HL7ParsingError(root_error_text, [this.parsed_segment])
+		return render_errors([root_error])
 	}
 }
