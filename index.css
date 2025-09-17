@@ -53,6 +53,21 @@ textarea {
 	}
 }
 
+.description-subtitle {
+	font-size: 0.8em;
+}
+
+.description-link {
+	color: var(--fg-color-2);
+	text-decoration: underline;
+	font-style: italic;
+}
+
+.description-link:hover {
+	background-color: var(--bg-color-2);
+	cursor: pointer;
+}
+
 .expand-button {
 	min-width: 2em;
 }

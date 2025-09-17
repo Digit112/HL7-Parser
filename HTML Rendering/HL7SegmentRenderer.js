@@ -21,9 +21,14 @@ class HL7SegmentRenderer {
 		this.constituent_description_div = constituent_description_div
 		this.entity_description_div = entity_description_div
 		
+		
+		let my_parsed_fields = this.parsed_segment.fields
+		if (this.parsed_segment.entity.type_id == "MSH") // Don't show MSH.1 (field delimiter)
+			my_parsed_fields = my_parsed_fields.slice(1)
+		
 		// Construct renderers for child elements.
 		this.field_renderers = []
-		for (let parsed_field of this.parsed_segment.fields) {
+		for (let parsed_field of my_parsed_fields) {
 			let new_field_renderer = new HL7ConstituentRenderer(parsed_field, this, this.constituent_description_div, this.entity_description_div)
 			this.field_renderers.push(new_field_renderer)
 		}
@@ -40,9 +45,6 @@ class HL7SegmentRenderer {
 		
 		rendered_segment.append(segment_header)
 		
-		let parsed_fields = this.parsed_segment.fields
-		if (this.parsed_segment.entity.type_id == "MSH") parsed_fields.shift()
-		
 		for (let field_renderer of this.field_renderers) {
 			let field_delimiter = this.parsed_segment.delimiters["components"][0]
 			let next_span = field_renderer.render(1)
@@ -56,7 +58,7 @@ class HL7SegmentRenderer {
 		console.log(this.parsed_segment)
 		
 		let description_suffix = this.parsed_segment.entity.description != "" ? ` - ${this.parsed_segment.entity.description}` : ""
-		let one_line_descripption = `SEGMENT ${this.parsed_segment.entity.type_id}${description_suffix}`
+		let one_line_description = `SEGMENT ${this.parsed_segment.entity.type_id}${description_suffix}`
 		
 		// Generate from w/ link if possible
 		let from_span = null
@@ -80,7 +82,7 @@ class HL7SegmentRenderer {
 		// Create header and body of explanation
 		let header = document.createElement("div")
 		header.setAttribute("id", "parsed-entity-description-header")
-		header.textContent = one_line_descripption
+		header.textContent = one_line_description
 		
 		let body = document.createElement("div")
 		body.setAttribute("id", "parsed-entity-description-body")

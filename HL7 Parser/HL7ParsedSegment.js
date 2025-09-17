@@ -23,12 +23,13 @@ class HL7ParsedSegment extends HL7ParsedEntity {
 		let field_bodies = body.split(delimiters["components"][0]).slice(1)
 		
 		// Special code for MSH
+		console.log(field_bodies)
 		if (type_id == "MSH")
 			field_bodies.unshift(delimiters["components"][0])
 		
 		this.fields = []
-		for (let constituent_i = 0; constituent_i < entity.constituents.length; constituent_i++) {
-			let constituent = entity.constituents[constituent_i]
+		for (let constituent_i = 0; constituent_i < this.entity.constituents.length; constituent_i++) {
+			let constituent = this.entity.constituents[constituent_i]
 			
 			// HL7 allows trailing delimiters to be omitted  beyond the last non-empty field.
 			// Thus, field_bodies may not be as long as constituents.
@@ -37,15 +38,17 @@ class HL7ParsedSegment extends HL7ParsedEntity {
 				field_body = field_bodies[constituent_i]
 			}
 			
-			//console.log(`Parsing '${field_body}' as ${entity.type_id}.${constituent.index} - '${constituent.description}'`)
+			let field_name = `${type_id}.${constituent.index} - ${constituent.description}`
+			
+			//console.log(`Parsing '${field_body}' as ${this.entity.type_id}.${constituent.index} - '${constituent.description}'`)
 			let new_field = new HL7ParsedConstituent(grammar, field_body, constituent, delimiters, 1)
 			
 			if (new_field.has_errors()) {
 				if (new_field.malformed && constituent.optionality == "R") {
-					this.failure(new HL7ParsingError(`Constituent ${entity.type_id}.${constituent.index} is malformed.`, [new_field]))
+					this.failure(new HL7ParsingError(`Field ${field_name} is malformed.`, [new_field]))
 				}
 				else {
-					this.errors.push(new HL7ParsingError(`Error(s) encountered while parsing constituent ${entity.type_id}.${constituent.index}.`, [new_field]))
+					this.errors.push(new HL7ParsingError(`Error(s) encountered while parsing constituent ${this.entity.type_id}.${constituent.index}.`, [new_field]))
 				}
 			}
 			

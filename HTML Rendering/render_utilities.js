@@ -1,3 +1,8 @@
+/*
+	Utilities used by rendering functions to avoid code duplication.
+	HL7 constructs have many quirks that defy abstraction...
+*/
+
 function _toggle_show_hide(elem, expand_button) {
 	if (elem.style.display == "none") {
 		elem.style.display = "block"
@@ -18,7 +23,12 @@ function render_errors(errors, is_root=true) {
 	
 	// Generate errors.
 	for (let error of errors) {
-		if (error.citations == null || error.citations.length == 0) {
+		let all_cited_errors = null
+		if (error.citations != null) {
+			all_cited_errors = [].concat(...(error.citations.map(citation => citation.errors)))
+		}
+		
+		if (all_cited_errors == null || all_cited_errors.length == 0) {
 			let error_paragraph = document.createElement("p")
 			error_paragraph.setAttribute("class", "errors-text")
 			error_paragraph.textContent = error.message
@@ -39,7 +49,6 @@ function render_errors(errors, is_root=true) {
 			error_header_p.setAttribute("class", "errors-text")
 			error_header_p.textContent = error.message
 			
-			let all_cited_errors = [].concat(...(error.citations.map(citation => citation.errors)))
 			let errors_body_div = render_errors(all_cited_errors, false)
 			errors_body_div.style.display = "none"
 			
@@ -49,4 +58,36 @@ function render_errors(errors, is_root=true) {
 	}
 	
 	return errors_div
+}
+
+// Builds out and returns a div with the passed entity's "long description" and "from" if they exist, putting a line break between them if they both exist.
+function render_long_description(underlying_entity) {
+	let body = document.createElement("div")
+	
+	// Generate from w/ link if possible
+	let from_span = null
+	if (underlying_entity.from != "") {
+		from_span = document.createElement("span")
+		if (underlying_entity.grammar.from != "") {
+			let hl7_link = document.createElement("a")
+			hl7_link.setAttribute("href", underlying_entity.grammar.from)
+			hl7_link.textContent = `HL7 ${underlying_entity.grammar.version_id}`
+			
+			from_span.append("From ", hl7_link, ` § ${underlying_entity.from}`)
+		}
+		else {
+			from_span.append(`From HL7 ${underlying_entity.grammar.version_id} § ${underlying_entity.from}`)
+		}
+	}
+	
+	// Build description
+	if (underlying_entity.long_description != "") {
+		body.append(underlying_entity.long_description)
+		if (from_span != null) body.append(document.createElement("br"))
+	}
+	if (from_span != null) {
+		body.append(from_span)
+	}
+	
+	return body
 }
