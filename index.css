@@ -57,10 +57,20 @@ textarea {
 	min-width: 2em;
 }
 
-.grammar-syntax-errors-header {
+.errors-div {
+	padding: 0.5em 1em;
+	
+	.errors-text {
+		font-family: monospace;
+		margin: 0.2em 0.5em;
+	}
+}
+
+.errors-header {
 	display: flex;
 	gap: 0.5em;
 	align-items: center;
+	margin: 0 0.2em;
 }
 
 .no-errors {
@@ -69,13 +79,4 @@ textarea {
 
 .errors {
 	color: var(--errors);
-}
-
-#grammar-syntax-errors-div {
-	padding: 0.5em 1em;
-	
-	p.grammar-syntax-error-text {
-		font-family: monospace;
-		margin: 0.2em 0.5em;
-	}
 }
