@@ -3,9 +3,10 @@
 	The rendered HTML has individual parts that can be clicked to show their descriptions.
 	constituent_description_div is where selected constituents will have their descriptions placed.
 	entity_description_div is where selected entities will have their descriptions placed.
-*/class HL7MessageRenderer {
-	constructor(message, constituent_description_div, entity_description_div) {
-		this.message = message
+*/
+class HL7MessageRenderer extends HL7EntityRenderer {
+	constructor(parsed_message, constituent_description_div, entity_description_div) {
+		super(parsed_message)
 		this.constituent_description_div = constituent_description_div
 		this.entity_description_div = entity_description_div
 	}
@@ -13,8 +14,8 @@
 	render() {
 		let message_div = document.createElement("div")
 		
-		for (let segment of this.message.segments) {
-			let segment_renderer = new HL7SegmentRenderer(segment, this.constituent_description_div, this.entity_description_div)
+		for (let segment of this.parsed_entity.segments) {
+			let segment_renderer = new HL7SegmentRenderer(segment, this)
 			
 			// TODO: How to deal with segment groups?
 			let rendered = segment_renderer.render()

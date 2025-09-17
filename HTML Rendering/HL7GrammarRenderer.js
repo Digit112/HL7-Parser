@@ -9,7 +9,7 @@ class HL7GrammarRenderer {
 	render_errors() {
 		let container_div = document.createElement("div")
 		let header_div = document.createElement("div")
-		header_div.setAttribute("class", "grammar-syntax-errors-header")
+		header_div.setAttribute("class", "errors-header")
 		
 		// No errors, simple text explaining.
 		if (this.grammar.grammar_syntax_errors.length == 0) {
@@ -25,6 +25,7 @@ class HL7GrammarRenderer {
 		else {
 			let errors_div = document.createElement("div")
 			errors_div.id = `HL7-Version-${this.grammar.version_id}-errors`
+			errors_div.setAttribute("class", "errors-div")
 			errors_div.style.display = "none" // Hit expand_buutton to show.
 			
 			let expand_button = document.createElement("button")
@@ -49,7 +50,7 @@ class HL7GrammarRenderer {
 			
 			for (let error of this.grammar.grammar_syntax_errors) {
 				let next_error = document.createElement("p")
-				next_error.setAttribute("class", "grammar-syntax-error-text")
+				next_error.setAttribute("class", "errors-text")
 				next_error.textContent = error.toString()
 				error_paragraphs.push(next_error)
 			}
