@@ -68,15 +68,7 @@ textarea {
 
 .errors-header {
 	display: flex;
-	gap: 0.5em;
+	gap: 0.25em;
 	align-items: center;
 	margin: 0 0.2em;
-}
-
-.no-errors {
-	color: var(--no-errors);
-}
-
-.errors {
-	color: var(--errors);
 }

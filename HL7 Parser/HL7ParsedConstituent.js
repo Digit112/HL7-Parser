@@ -127,13 +127,33 @@ class HL7ParsedConstituent extends HL7ParsedEntity {
 					continue
 				}
 				
+				// Get the component corresponding to this constituent.
 				// HL7 allows trailing delimiters to be omitted beyond the last non-empty component.
 				// Thus, component_bodies may not be as long as constituents.
 				let component_body = ""
 				if (constituent_i < component_bodies.length) {
 					component_body = component_bodies[constituent_i]
 				}
-				let component_name = `${type.type_id}.${constituent.index} - '${constituent.description}' (${constituent.optionality})`
+				
+				let optionality_text = null
+				switch (constituent.optionality) {
+					case "O":
+						optionality_text = "Opt."
+						break
+					case "R":
+						optionality_text = "Req."
+						break
+					case "B":
+						optionality_text = "Backwards Compatible"
+						break
+					case "W":
+						optionality_text = "Withdrawn"
+						break
+					default:
+						optionality_text = constituent.optionality
+				}
+						
+				let component_name = `${type.type_id}.${constituent.index} - '${constituent.description}' *(${(optionality_text)})*`
 				
 				//console.log(`Parsing '${component_body}' as ${component_name}`)
 				let parsed_component = new HL7ParsedConstituent(this.grammar, component_body, constituent, delimiters, level+1)

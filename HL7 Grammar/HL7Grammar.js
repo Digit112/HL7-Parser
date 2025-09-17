@@ -1,4 +1,4 @@
-class HL7GrammarError extends Error{
+class HL7GrammarError extends Error {
 	constructor(error_message, file_of_origin) {
 		super(`In '${file_of_origin}' - ${error_message}`)
 	}

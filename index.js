@@ -68,9 +68,8 @@ async function load_grammar_definitions(HL7GR_file) {
 			// Show errros
 			let all_versions_errors_div = document.getElementById("grammar-syntax-errors-div")
 			
-			all_versions_errors_div.replaceChildren(
-				...Object.values(HL7_versions).map(val => new HL7GrammarRenderer(val).render_errors())
-			)
+			let all_grammar_errors = Object.values(HL7_versions).map(val => new HL7GrammarRenderer(val).render_errors())
+			all_versions_errors_div.replaceChildren(...all_grammar_errors)
 			
 			hl7_version_span.style.display = "inline"
 			all_versions_errors_div.style.display = "block"

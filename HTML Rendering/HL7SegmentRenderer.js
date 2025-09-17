@@ -64,46 +64,7 @@ class HL7SegmentRenderer {
 		}
 		
 		// Generate Errors Collapsible
-		let errors_div = document.createElement("div")
-		let errors_header_div = document.createElement("div")
-		errors_header_div.style.display = "flex"
-		
-		let errors_text = document.createElement("span")
-		if (this.parsed_segment.errors.length == 0) {
-			errors_text.setAttribute("class", "no-errors")
-			errors_text.textContent = "Segment parsed without issue."
-			
-			errors_header_div.append(errors_text)
-			errors_div.append(errors_header_div)
-		}
-		else {
-			let errors_body_div = document.createElement("div")
-			errors_body_div.style.display = "none"
-			
-			errors_text.setAttribute("class", "errors")
-			errors_text.textContent = `Segment parsed with ${this.parsed_segment.errors.length} issues.`
-		
-			// Generic button to expand/collapse the body.
-			let errors_expand_button = document.createElement("button")
-			errors_expand_button.setAttribute("class", "expand-button")
-			errors_expand_button.textContent = "+"
-			errors_expand_button.addEventListener("click", () => {
-				if (errors_body_div.style.display == "none") {
-					errors_body_div.style.display = "block"
-					errors_expand_button.textContent = "-"
-				}
-				else {
-					errors_body_div.style.display = "none"
-					errors_expand_button.textContent = "+"
-				}
-			})
-			
-			// Generate 
-			
-			errors_header_div.append(errors_expand_button, errors_text)
-			errors_div.append(errors_header_div, errors_body_div)
-		}
-		
+		let errors_div = render_errors(this.parsed_segment.errors)
 		
 		// Create header and body of explanation
 		let header = document.createElement("div")
