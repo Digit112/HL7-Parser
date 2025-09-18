@@ -104,8 +104,12 @@ class HL7ConstituentRenderer {
 		let description_suffix = this.parsed_constituent.entity.description != "" ? ` - ${this.parsed_constituent.entity.description}` : ""
 		let one_line_description = `${this.parsed_constituent.entity.parent_type_id}.${this.parsed_constituent.entity.index}${description_suffix}`
 		
-		let errors_div = this.render_errors()
 		let long_desc_div = render_long_description(this.parsed_constituent.entity)
+		let constituents_div = null
+		if (this.constituent_type.get_metatype() == "COMPOSITE" || this.constituent_type.get_metatype() == "SUBCOMPOSITE") {
+			constituents_div = render_constituent_renderer_descriptions(this.parsed_constituent.repetitions[0])
+		}
+		let errors_div = this.render_errors()
 		
 		// Create header and body of explanation
 		let header = document.createElement("div")

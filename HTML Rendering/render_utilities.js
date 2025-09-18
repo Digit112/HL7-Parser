@@ -91,3 +91,37 @@ function render_long_description(underlying_entity) {
 	
 	return body
 }
+
+// Takes a list of HL7ConstituentRenderers, and renders a list of them into a div which it returns.
+// Each links to a render_description() method.
+function render_constituent_renderer_descriptions(renderers) {
+	console.log(renderers)
+	if (!Array.isArray(renderers)) {
+		console.log(renderers)
+		throw new Error("renderers must be array of HL7ConstituentRenderers.")
+	}
+	
+	let constituents_div = document.createElement("div")
+	
+	for (let renderer of renderers) {
+		if (!(renderer instanceof HL7ConstituentRenderers)) {
+			console.log(renderers)
+			throw new Error("renderers must be array of HL7ConstituentRenderers.")
+		}
+		
+		let desc_span = document.createElement("span")
+		let desc_text = renderer.parsed_constituent.entity.description != "" ? ` - ${renderer.parsed_constituent.entity.description}` : ""
+		desc_span.textContent = desc_text
+		
+		let link_span = document.createElement("span")
+		link_span.setAttribute("class", "description-link")
+		link_span.textContent = `${renderer.parsed_constituent.entity.type}.${renderer.parsed_constituent.entity.index}`
+		
+		let summary_span = document.createElement("span")
+		
+		desc_span.append(link_span, summary_span)
+		constituents_div.append(desc_span, document.createElement("br"))
+	}
+	
+	return constituents_div
+}

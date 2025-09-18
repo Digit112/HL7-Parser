@@ -63,10 +63,11 @@ class HL7SegmentRenderer {
 		
 		let supercomponent_span = document.createElement("span")
 		let parent_message_entity = this.message_renderer.parsed_message.entity
-		if (parent_message_entity != null)
+		if (parent_message_entity != null) {
 			supercomponent_span.setAttribute("class", "description-link")
-			supercomponent_span.textContent = `${this.message_renderer.parsed_message.entity.type_id}`
+			supercomponent_span.textContent = `${parent_message_entity.type_id}`
 			supercomponent_span.addEventListener("click", () => this.message_renderer.render_description())
+		}
 		
 		let description_suffix = this.parsed_segment.entity.description != "" ? ` - ${this.parsed_segment.entity.description}` : ""
 		let one_line_description = `${this.parsed_segment.entity.type_id}${description_suffix}`

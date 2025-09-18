@@ -32,8 +32,6 @@ class HL7MessageRenderer {
 	}
 	
 	render_description() {
-		console.log(this)
-		
 		let description_suffix = this.parsed_message.entity.description != "" ? ` - ${this.parsed_message.entity.description}` : ""
 		let one_line_description = `${this.parsed_message.entity.type_id}${description_suffix}`
 		
