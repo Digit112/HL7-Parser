@@ -83,8 +83,6 @@ class HL7ConstituentRenderer {
 	}
 	
 	render_description() {
-		console.log(this.parsed_constituent)
-		
 		let type_span = document.createElement("span")
 		type_span.setAttribute("class", "description-link")
 		type_span.textContent = `${this.constituent_type.get_metatype()} ${this.parsed_constituent.entity.type}`
@@ -96,11 +94,11 @@ class HL7ConstituentRenderer {
 		// Get parent entity
 		if (this.parent_renderer instanceof HL7ConstituentRenderer) {
 			let parent_entity = this.parent_renderer.parsed_constituent.entity
-			supercomponent_span.textContent = `${this.parsed_constituent.entity.parent_metatype} ${parent_entity.parent_type_id}.${parent_entity.index}`
+			supercomponent_span.textContent = `${parent_entity.parent_type_id}.${parent_entity.index}`
 		}
 		else {
 			let parent_entity = this.parent_renderer.parsed_segment.entity
-			supercomponent_span.textContent = `SEGMENT ${parent_entity.type_id}`
+			supercomponent_span.textContent = `${parent_entity.type_id}`
 		}
 	
 		let description_suffix = this.parsed_constituent.entity.description != "" ? ` - ${this.parsed_constituent.entity.description}` : ""
@@ -111,6 +109,7 @@ class HL7ConstituentRenderer {
 		
 		// Create header and body of explanation
 		let header = document.createElement("div")
+		header.setAttribute("class", "description-header")
 		header.textContent = one_line_description
 		
 		let body = document.createElement("div")

@@ -54,51 +54,43 @@ class HL7SegmentRenderer {
 		return rendered_segment
 	}
 	
+	// Render a lengthy description of this segment.
+	// Unlike the ConstituentRenderer, this pulls its description from the backing segment type
+	// rather than from its 
 	render_description() {
-		console.log(this.parsed_segment)
+		let type_span = document.createElement("span")
+		type_span.textContent = `SEGMENT ${this.parsed_segment.entity.type_id}`
+		
+		let supercomponent_span = document.createElement("span")
+		let parent_message_entity = this.message_renderer.parsed_message.entity
+		if (parent_message_entity != null)
+			supercomponent_span.setAttribute("class", "description-link")
+			supercomponent_span.textContent = `${this.message_renderer.parsed_message.entity.type_id}`
+			supercomponent_span.addEventListener("click", () => this.message_renderer.render_description())
 		
 		let description_suffix = this.parsed_segment.entity.description != "" ? ` - ${this.parsed_segment.entity.description}` : ""
-		let one_line_description = `SEGMENT ${this.parsed_segment.entity.type_id}${description_suffix}`
+		let one_line_description = `${this.parsed_segment.entity.type_id}${description_suffix}`
 		
-		// Generate from w/ link if possible
-		let from_span = null
-		if (this.parsed_segment.entity.from != "") {
-			from_span = document.createElement("span")
-			if (this.parsed_segment.grammar.from != "") {
-				let hl7_link = document.createElement("a")
-				hl7_link.setAttribute("href", this.parsed_segment.grammar.from)
-				hl7_link.textContent = `HL7 ${this.parsed_segment.grammar.version_id}`
-				
-				from_span.append("From ", hl7_link, ` § ${this.parsed_segment.entity.from}`)
-			}
-			else {
-				from_span.append(`From HL7 ${this.parsed_segment.grammar.version_id} § ${this.parsed_segment.entity.from}`)
-			}
-		}
-		
-		// Generate Errors Collapsible
 		let errors_div = this.render_errors()
+		let long_desc_div = render_long_description(this.parsed_segment.entity)
 		
 		// Create header and body of explanation
 		let header = document.createElement("div")
-		header.setAttribute("id", "parsed-entity-description-header")
+		header.setAttribute("class", "description-header")
 		header.textContent = one_line_description
 		
 		let body = document.createElement("div")
-		body.setAttribute("id", "parsed-entity-description-body")
 		
-		if (this.parsed_segment.entity.long_description != "") {
-			body.append(this.parsed_segment.entity.long_description)
-			if (from_span != null) body.append(document.createElement("br"))
-		}
-		if (from_span != null) {
-			body.append(from_span)
-		}
+		let subtitle = document.createElement("div")
+		subtitle.setAttribute("class", "description-subtitle")
+		subtitle.append(type_span)
+		if (parent_message_entity != null)
+			subtitle.append(" OF ", supercomponent_span)
 		
 		// Show errors, if any.
-		body.append(errors_div)
+		body.append(long_desc_div, errors_div)
 		
-		this.constituent_description_div.replaceChildren(header, body)
+		this.constituent_description_div.replaceChildren(header, subtitle, body)
 	}
 	
 	// Wraps this entity's errors in a single error with a nice header and returns it.

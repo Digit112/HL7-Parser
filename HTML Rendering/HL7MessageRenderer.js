@@ -30,6 +30,39 @@ class HL7MessageRenderer {
 		
 		return message_div
 	}
+	
+	render_description() {
+		console.log(this)
+		
+		let description_suffix = this.parsed_message.entity.description != "" ? ` - ${this.parsed_message.entity.description}` : ""
+		let one_line_description = `${this.parsed_message.entity.type_id}${description_suffix}`
+		
+		let errors_div = this.render_errors()
+		let long_desc_div = render_long_description(this.parsed_message.entity)
+		
+		// Create header and body of explanation
+		let header = document.createElement("div")
+		header.setAttribute("class", "description-header")
+		header.textContent = one_line_description
+		
+		let body = document.createElement("div")
+		
+		// Show errors, if any.
+		body.append(long_desc_div, errors_div)
+		
+		this.constituent_description_div.replaceChildren(header, body)
+	}
+	
+	render_errors() {
+		let root_error_text = ""
+		if (this.parsed_message.errors.length == 0)
+			root_error_text = "Message parsed without error."
+		else
+			root_error_text = `Message parsed with ${this.parsed_message.errors.length} error(s).`
+		
+		let root_error = new HL7ParsingError(root_error_text, [this.parsed_message])
+		return render_errors([root_error])
+	}
 }
 
 /*

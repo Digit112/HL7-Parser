@@ -53,6 +53,10 @@ textarea {
 	}
 }
 
+.description-header {
+	font-weight: bold;
+}
+
 .description-subtitle {
 	font-size: 0.8em;
 }
